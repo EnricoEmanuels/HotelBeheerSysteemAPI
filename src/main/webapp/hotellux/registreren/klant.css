@@ -1,0 +1,231 @@
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* ruimte tussen de secties */
+    align-items: center;
+    padding: 60px 20px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.validation-message {
+    color: #ff4444;
+    font-size: 0.85rem;
+    display: none;
+    margin-top: 4px;
+}
+.form-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.animated-background {
+    background: linear-gradient(-45deg, #4158D0, #C850C0, #FFCC70, #3e8e9e);
+    background-size: 400% 400%;
+    animation: gradientFlow 10s ease infinite;
+}
+
+
+body {
+    background: linear-gradient(120deg, #3e8e9e, #154c79);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    /*align-items: center;*/
+    overflow-y: auto;
+
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    padding: 40px 30px;
+    width: 350px;
+    color: white;
+    font-size: 22px;
+    animation: fadeIn 1s ease forwards;
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 20px;
+    outline: none;
+    transition: background 0.3s ease;
+}
+
+form input::placeholder {
+    color: #e0e0e0;
+}
+
+form input:focus {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #ffffff;
+    color: #154c79;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #e0e0e0;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* voor die get all */
+
+.glass-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
+}
+
+.glass-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(30, 30, 30, 0.5);
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup-content {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 700px;
+    width: 90%;
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+    max-height: 80vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* find by id  */
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="number"] {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 16px;
+    backdrop-filter: blur(6px);
+}
+
+input[type="number"]::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 15px;
+    margin-top: 20px;
+    color: #fff;
+}
+
+/*voor die put */
+
+.update-container {
+    margin-top: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    animation: fadeIn 1s ease;
+    color: white;
+}
+
+.update-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.update-section {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+

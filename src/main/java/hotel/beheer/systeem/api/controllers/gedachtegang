@@ -1,0 +1,52 @@
+1. JPA Mapping klopt
+java
+Copy
+Edit
+@ManyToOne(optional = true, fetch = FetchType.LAZY)
+@JoinColumn(name = "betaalmethode_id")
+private Betaalmethode betaalmethode;
+optional = true betekent dat het veld null mag zijn.
+
+Als je geen betaalmethode meestuurt bij je update, dan blijft het null of wordt het null als je expliciet setBetaalmethode(null) doet.
+
+2. PUT Request mag optionele velden hebben
+Stel dat je frontend je JSON stuurt zoals:
+
+json
+Copy
+Edit
+{
+  "voornaam": "Enrico",
+  "achternaam": "Emanuels",
+  "email": "enrico@example.com",
+  "telefoon": "597123456",
+  "balans": 200.00,
+  "betaalmethodeId": 3
+}
+Dan check je in je controller gewoon:
+
+java
+Copy
+Edit
+if (geupdateKlant.getBetaalmethode() != null) {
+    bestaandeKlant.setBetaalmethode(geupdateKlant.getBetaalmethode());
+} else {
+    bestaandeKlant.setBetaalmethode(null); // eventueel alleen als je het wilt resetten
+}
+Of als je enkel een ID krijgt:
+
+java
+Copy
+Edit
+if (betaalmethodeId != null) {
+    Betaalmethode bm = entityManager.find(Betaalmethode.class, betaalmethodeId);
+    bestaandeKlant.setBetaalmethode(bm);
+}
+3. Database accepteert het ook
+Je CREATE TABLE zegt:
+
+sql
+Copy
+Edit
+betaalmethode_id INT
+Dat betekent: mag null zijn. Je bent dus ook aan de database-kant correct bezig.

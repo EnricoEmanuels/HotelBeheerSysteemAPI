@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Klant Registratie | HotelLux</title>
+  <link rel="stylesheet" href="klant.css" />
+  <script src="klant.js"></script>
+</head>
+<body class="animated-background">
+  <div class="page-wrapper">
+    <!-- ALLES VAN KLANTEN HIERBINNEN -->
+    <section>
+      <div class="form-container">
+        <h2>Registreer als Klant</h2>
+        <form id="klantForm">
+          <div class="form-group">
+            <input type="text" id="voornaam" name="voornaam" placeholder="Voornaam"  />
+            <span class="validation-message" id="voornaam-validation">Voornaam is verplicht.</span>
+          </div>
+
+          <div class="form-group">
+            <input type="text" id="achternaam" name="achternaam" placeholder="Achternaam"  />
+            <span class="validation-message" id="achternaam-validation">Achternaam is verplicht.</span>
+          </div>
+
+          <div class="form-group">
+            <input type="tel" id="telefoon" name="telefoon" placeholder="Telefoonnummer"  />
+            <span class="validation-message" id="telefoon-validation">Telefoonnummer is verplicht.</span>
+          </div>
+
+          <div class="form-group">
+            <input type="email" id="email" name="email" placeholder="E-mail"  />
+            <span class="validation-message" id="email-validation">E-mail is verplicht.</span>
+          </div>
+
+          <div class="form-group">
+            <input type="number" id="balans" name="balans" placeholder="Balans (bijv. 250.00)" step="0.01"  />
+            <span class="validation-message" id="balans-validation">Balans is verplicht.</span>
+          </div>
+
+          <div class="form-group">
+            <input type="number" id="betaalmethode_id" name="betaalmethode_id" placeholder="Betaalmethode ID (optioneel)" />
+          </div>
+
+          <button type="submit">Registreren</button>
+        </form>
+      </div>
+      <pre id="createResponse"></pre>
+    </section>
+
+    <!-- ALLE KLANTEN OPHALEN - GLASSY POPUP -->
+    <section>
+      <button id="fetchKlantenButton" class="glass-button">Toon Alle Klanten</button>
+
+      <div id="klantenPopup" class="glass-popup hidden">
+        <div class="popup-content">
+          <span id="closePopup" class="close-button">&times;</span>
+          <h2>Alle Klanten</h2>
+          <pre id="klanten"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- KLANT OPHALEN VIA ID -->
+    <section>
+      <button id="getKlantByIdBtn" class="glass-button">Zoek Klant op ID</button>
+
+      <div id="klantByIdPopup" class="glass-popup hidden">
+        <div class="popup-content">
+          <span class="close-button" id="closeKlantPopup">&times;</span>
+          <h2>Klant zoeken</h2>
+          <form id="klantByIdForm">
+            <div class="form-group">
+              <label for="klantIdInput">Klant ID:</label>
+              <input type="number" id="klantIdInput" required>
+            </div>
+            <button type="submit" class="glass-button">Zoeken</button>
+          </form>
+          <pre id="klantByIdResult"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- KLANT BIJWERKEN (PUT) -->
+    <section class="update-section">
+      <div class="form-container update-container">
+        <h2>Update Klantgegevens</h2>
+        <form id="updateKlantForm">
+          <div class="form-group">
+            <input type="number" id="update-id" placeholder="Klant ID (verplicht)" required />
+          </div>
+          <div class="form-group">
+            <input type="text" id="update-voornaam" placeholder="Nieuwe voornaam" />
+          </div>
+          <div class="form-group">
+            <input type="text" id="update-achternaam" placeholder="Nieuwe achternaam" />
+          </div>
+          <div class="form-group">
+            <input type="tel" id="update-telefoon" placeholder="Nieuw telefoonnummer" />
+          </div>
+          <div class="form-group">
+            <input type="email" id="update-email" placeholder="Nieuw e-mailadres" />
+          </div>
+          <div class="form-group">
+            <input type="number" id="update-balans" placeholder="Nieuwe balans" step="0.01" />
+          </div>
+          <div class="form-group">
+            <input type="number" id="update-betaalmethode" placeholder="Betaalmethode ID (optioneel)" />
+          </div>
+          <button type="submit">Klant Bijwerken</button>
+        </form>
+
+        <pre id="updateResponse"></pre>
+      </div>
+    </section>
+
+
+  </div>
+
+
+
+
+</body>
+</html>
+
+<!--<div class="form-container">-->
+<!--  <h2>Registreer als Klant</h2>-->
+<!--  <form id="klantForm">-->
+<!--    <input type="text" name="voornaam" placeholder="Voornaam" required />-->
+<!--    <input type="text" name="achternaam" placeholder="Achternaam" required />-->
+<!--    <input type="tel" name="telefoon" placeholder="Telefoonnummer" required />-->
+<!--    <input type="email" name="email" placeholder="E-mail" required />-->
+<!--    <input type="number" name="balans" placeholder="Balans (bijv. 250.00)" step="0.01" required />-->
+<!--    <input type="number" name="betaalmethode_id" placeholder="Betaalmethode ID (optioneel)" />-->
+<!--    <button type="submit">Registreren</button>-->
+<!--  </form>-->
+<!--</div>-->

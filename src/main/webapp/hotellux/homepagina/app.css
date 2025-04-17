@@ -1,0 +1,162 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    overflow-x: hidden; /* voorkomt links/rechts scrollen */
+    min-height: 100vh;
+}
+
+.animated-background {
+    background: linear-gradient(-45deg, #4158D0, #C850C0, #FFCC70, #3e8e9e);
+    background-size: 400% 400%;
+    animation: gradientFlow 10s ease infinite;
+}
+
+/* Navigatiebalk */
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem 2rem;
+    color: white;
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #FFCC70;
+}
+
+/* Welkomstkaart */
+.form-container {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    padding: 40px 30px;
+    margin: 60px auto;
+    width: 90%;
+    max-width: 600px;
+    color: white;
+    animation: fadeIn 1s ease forwards;
+    text-align: center;
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.form-container p {
+    font-size: 16px;
+}
+
+/* Hero sectie */
+.hero {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+}
+
+/* Kamers sectie */
+.rooms-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: white;
+}
+
+.rooms-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.room-card {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    width: 300px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.room-card:hover {
+    transform: scale(1.03);
+}
+
+.room-card img {
+    width: 100%;
+    height: auto;
+}
+
+.room-card h3 {
+    margin: 1rem 0 0.5rem;
+}
+
+.room-card p {
+    margin-bottom: 1rem;
+    color: #FFCC70;
+    font-weight: bold;
+}
+
+/* Animaties */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes gradientFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
