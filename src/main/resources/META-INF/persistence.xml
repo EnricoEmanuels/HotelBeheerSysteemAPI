@@ -7,10 +7,6 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <properties>
-            <!--            <property name="javax.persistence.jdbc.url"-->
-            <!--                      value="jdbc:mysql://localhost:3306/subscription_manager?useUnicode=true;characterEncoding=UTF-8;useSSL=false;verifyServerCertificate=false;"/>-->
-            <!--            <property name="javax.persistence.jdbc.user" value="root"/>-->
-            <!--            <property name="javax.persistence.jdbc.password" value="e9n4r2i0c0"/>-->
 
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/hotelbeheersysteemapi"/>

@@ -1,56 +1,20 @@
-package hotel.beheer.systeem.api.entities;
+package hotel.beheer.systeem.api.dto;
 
-import jakarta.persistence.*;
+import hotel.beheer.systeem.api.entities.Betaalmethode;
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 
-
-
-@Entity
-@Table(name = "klant" , schema = "hotelbeheersysteemapi")
-
-public class Klant {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+public class KlantDTO {
     private Integer id;
-
-    @Column(name = "voornaam", nullable = false, length = 255)
     private String voornaam;
-
-    @Column(name = "achternaam", nullable = false, length = 255)
     private String achternaam;
-
-    @Column(name = "telefoon", nullable = false, length = 255)
     private String telefoon;
-
-    @Column(name = "email", nullable = false, length = 255)
     private String email;
-
-    @Column(name = "balans", nullable = false)
     private double balans;
-
-    @ManyToOne( optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "betaalmethode_id")
     private Betaalmethode betaalmethode;
 
-    public Klant() {
-
-    }
-
-    public Klant(Integer id, Betaalmethode betaalmethode) {
-        this.id = id;
-        this.betaalmethode = betaalmethode;
-    }
-
-    public Klant(int id, String voornaam, String achternaam, String telefoon, String email, double balans) {
-        this.id = id;
-        this.voornaam = voornaam;
-        this.achternaam = achternaam;
-        this.telefoon = telefoon;
-        this.email = email;
-        this.balans = balans;
-    }
-
-    public Klant(int id, String voornaam, String achternaam, String telefoon, String email, double balans, Betaalmethode betaalmethode) {
+    public KlantDTO(Integer id, String voornaam, String achternaam, String telefoon, String email, double balans, Betaalmethode betaalmethode) {
         this.id = id;
         this.voornaam = voornaam;
         this.achternaam = achternaam;
@@ -60,15 +24,7 @@ public class Klant {
         this.betaalmethode = betaalmethode;
     }
 
-    public Klant(String voornaam, String achternaam, String telefoon, String email, double balans) {
-        this.voornaam = voornaam;
-        this.achternaam = achternaam;
-        this.telefoon = telefoon;
-        this.email = email;
-        this.balans = balans;
-    }
-
-    public Klant(String voornaam, String achternaam, String telefoon, String email, double balans, Betaalmethode betaalmethode) {
+    public KlantDTO(String voornaam, String achternaam, String telefoon, String email, double balans, Betaalmethode betaalmethode) {
         this.voornaam = voornaam;
         this.achternaam = achternaam;
         this.telefoon = telefoon;
@@ -77,11 +33,28 @@ public class Klant {
         this.betaalmethode = betaalmethode;
     }
 
-    public int getId() {
+    public KlantDTO(Integer id, String voornaam, String achternaam, String telefoon, String email, double balans) {
+        this.id = id;
+        this.voornaam = voornaam;
+        this.achternaam = achternaam;
+        this.telefoon = telefoon;
+        this.email = email;
+        this.balans = balans;
+    }
+
+    public KlantDTO(String voornaam, String achternaam, String telefoon, String email, double balans) {
+        this.voornaam = voornaam;
+        this.achternaam = achternaam;
+        this.telefoon = telefoon;
+        this.email = email;
+        this.balans = balans;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -125,10 +98,6 @@ public class Klant {
         this.balans = balans;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Betaalmethode getBetaalmethode() {
         return betaalmethode;
     }
@@ -139,7 +108,7 @@ public class Klant {
 
     @Override
     public String toString() {
-        return "Klant{" +
+        return "KlantDTO{" +
                 "id=" + id +
                 ", voornaam='" + voornaam + '\'' +
                 ", achternaam='" + achternaam + '\'' +

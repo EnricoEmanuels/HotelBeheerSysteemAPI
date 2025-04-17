@@ -1,0 +1,28 @@
+PS C:\Users\user\Mijnprojecten\HotelBeheerSysteemAPI> java -jar target/hotelbeheersysteem-api.jar
+Exception in thread "main" java.lang.NullPointerException: Cannot invoke "jakarta.persistence.EntityManagerFactory.createEntityManager()" because "hotel.beheer.systeem.api.config.JPAConfig.emf" is null
+        at hotel.beheer.systeem.api.config.JPAConfig.getEntityManger(JPAConfig.java:27)
+        at hotel.beheer.systeem.api.HotelBeheerSysteemConfig.main(HotelBeheerSysteemConfig.java:48)
+PS C:\Users\user\Mijnprojecten\HotelBeheerSysteemAPI>
+
+
+ik ga die private constructor uit commemnten mischien daarom krijg ik die null pointer
+
+
+Foutmelding ontleed
+Cannot invoke "jakarta.persistence.EntityManagerFactory.createEntityManager()" because "hotel.beheer.systeem.api.config.JPAConfig.emf" is null
+
+Waar dit op neerkomt: Je roept emf.createEntityManager() aan, maar emf zelf is nog null op dat moment.
+
+Waar ligt het probleem?
+In jouw JPAConfig.getEntityManger() methode:
+
+java
+Copy
+Edit
+public static EntityManager getEntityManger(){
+    if (em == null ) {
+        em  = emf.createEntityManager(); // <-- hier gaat het mis als emf null is
+    }
+    return em;
+}
+Maar... emf is nog niet geïnitialiseerd! Je moet eerst getEntityMangerFactory() aanroepen voordat je getEntityManger() gebruikt.

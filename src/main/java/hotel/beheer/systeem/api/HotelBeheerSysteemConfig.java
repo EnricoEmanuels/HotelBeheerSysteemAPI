@@ -1,7 +1,14 @@
 package hotel.beheer.systeem.api;
 
+import hotel.beheer.systeem.api.config.JPAConfig;
+import hotel.beheer.systeem.api.controllers.KlantController;
+import hotel.beheer.systeem.api.dao.KlantDao;
+import hotel.beheer.systeem.api.mappers.KlantMapper;
+import hotel.beheer.systeem.api.services.KlantService;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -39,6 +46,18 @@ public class HotelBeheerSysteemConfig
         // Register CORSFilter
         FilterHolder corsFilter = new FilterHolder(new CORSFilter());
         context.addFilter(corsFilter, "/*", null);
+
+        // Eerst deze regel: dit initialiseert de EntityManagerFactory
+        EntityManagerFactory entityManagerFactory = JPAConfig.getEntityMangerFactory();
+
+        // Dan pas deze regel: nu is emf niet meer null
+        EntityManager entityManager = JPAConfig.getEntityManger();
+
+        KlantDao klantDao = new KlantDao(entityManager);
+        KlantMapper klantMapper = new KlantMapper();
+        KlantService klantService = new KlantService(klantDao);
+        KlantController klantController = new KlantController(klantService, klantMapper);
+        config.register(klantController);
 
 
 
