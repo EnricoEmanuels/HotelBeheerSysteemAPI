@@ -8,6 +8,7 @@
   <script src="klant.js"></script>
 </head>
 <body class="animated-background">
+
   <div class="page-wrapper">
     <!-- ALLES VAN KLANTEN HIERBINNEN -->
     <section>
@@ -114,6 +115,20 @@
         <pre id="updateResponse"></pre>
       </div>
     </section>
+
+    <!-- DELETE KLANT SECTION -->
+    <section class="delete-klant-section glass-card">
+      <h2>Verwijder Klant</h2>
+      <form id="deleteKlantForm" class="glass-form">
+        <div class="input-group">
+          <label for="klant-id">Klant ID:</label>
+          <input type="number" id="klant-id" name="klant-id" required placeholder="Bijv. 3" />
+        </div>
+        <button type="submit" class="delete-btn">Verwijder Klant</button>
+        <p id="deleteMessage" class="delete-message"></p>
+      </form>
+    </section>
+
 
 
   </div>

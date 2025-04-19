@@ -1,0 +1,124 @@
+1. Constructor injection en waarom je toegang hebt tot methodes
+Je hebt dit gedaan:
+
+java
+Copy
+Edit
+public KlantController(KlantService klantService, KlantMapper klantMapper, BetaalmethodeService betaalmethodeService) {
+    this.klantService = klantService;
+    this.klantMapper = klantMapper;
+    this.betaalmethodeService = betaalmethodeService;
+}
+Wat je hier doet is constructor injection. Dat betekent:
+
+Je maakt een object aan van BetaalmethodeService in je main-klasse.
+
+Je geeft dat object mee als parameter aan de KlantController.
+
+In de constructor wijs je het toe aan een class-eigenschap (this.betaalmethodeService).
+
+Hierdoor heb je in de hele KlantController-klasse toegang tot alle methodes en eigenschappen van BetaalmethodeService via betaalmethodeService.
+
+Je hoeft dus niet opnieuw een object aan te maken binnenin de controller, want dat is al gedaan en via de constructor ‘geïnjecteerd’.
+
+2. Die veilige check in de PUT-methode
+java
+Copy
+Edit
+if (geupdateKlant.getBetaalmethode() == null || geupdateKlant.getBetaalmethode().getId() == null) {
+    bestaandeKlant.setBetaalmethode(null);
+}
+Laten we dit ontleden:
+
+geupdateKlant is het object dat je binnenkrijgt van de frontend (bijv. via Postman of een formulier).
+
+geupdateKlant.getBetaalmethode() kijkt: heeft deze klant een betaalmethode ingevuld?
+
+Als dat null is, dan weet je dat de gebruiker geen betaalmethode heeft meegegeven.
+
+En zelfs als het object wél bestaat, maar .getId() is null, dan is het nog steeds ongeldig. Want zonder ID weten we niet welke betaalmethode het is.
+
+Daarom zeg je: als een van die twee null is, dan wil je gewoon geen betaalmethode opslaan — dus setBetaalmethode(null).
+
+En ja: de setter setBetaalmethode(...) accepteert een Betaalmethode object, maar null is ook toegestaan zolang je methode het zo heeft:
+
+java
+Copy
+Edit
+public void setBetaalmethode(Betaalmethode betaalmethode) {
+    this.betaalmethode = betaalmethode;
+}
+In Java mag je een object-parameter als null doorgeven. Dus klant.setBetaalmethode(null) is helemaal geldig.
+
+3. De else-blok
+java
+Copy
+Edit
+else {
+    Betaalmethode bestaandeBetaalmethode = betaalmethodeService.getBetaalmethodeById(geupdateKlant.getBetaalmethode().getId());
+    bestaandeKlant.setBetaalmethode(bestaandeBetaalmethode);
+}
+Wat gebeurt hier:
+
+Je gaat ervan uit dat de betaalmethode is meegegeven én dat er een ID in zit.
+
+Dan pak je dat ID op met:
+
+java
+Copy
+Edit
+geupdateKlant.getBetaalmethode().getId()
+Belangrijk:
+
+geupdateKlant.getBetaalmethode() geeft een Betaalmethode object dat is meegegeven via de JSON.
+
+.getId() pakt het ID eruit.
+
+Daarmee roep je betaalmethodeService.getBetaalmethodeById(...) aan — je haalt een volledig bestaand object op uit de database.
+
+En dat object gebruik je bij:
+
+java
+Copy
+Edit
+bestaandeKlant.setBetaalmethode(bestaandeBetaalmethode);
+Waarom? Want de JSON die je kreeg bevat maar een referentie (alleen het ID), en jij wilt zeker weten dat die Betaalmethode echt bestaat in de database, en ook het volledige object koppelen aan je klant.
+
+4. Van waar komt getBetaalmethode() en getId()?
+Je vroeg: waar komt geupdateKlant.getBetaalmethode().getId() vandaan?
+
+geupdateKlant is een Klant object.
+
+In je Klant klasse heb je waarschijnlijk iets zoals:
+
+java
+Copy
+Edit
+private Betaalmethode betaalmethode;
+
+public Betaalmethode getBetaalmethode() {
+    return betaalmethode;
+}
+Dus geupdateKlant.getBetaalmethode() geeft jou een Betaalmethode object.
+
+En in de klasse Betaalmethode heb je:
+
+java
+Copy
+Edit
+private Integer id;
+
+public Integer getId() {
+    return id;
+}
+Dus als je schrijft:
+
+java
+Copy
+Edit
+geupdateKlant.getBetaalmethode().getId()
+dan doe je dit:
+
+Pak de Betaalmethode uit het Klant-object.
+
+Pak daaruit het id-veld.

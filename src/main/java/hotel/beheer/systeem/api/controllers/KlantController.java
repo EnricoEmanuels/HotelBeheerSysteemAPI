@@ -1,8 +1,10 @@
 package hotel.beheer.systeem.api.controllers;
 
 import hotel.beheer.systeem.api.dto.KlantDTO;
+import hotel.beheer.systeem.api.entities.Betaalmethode;
 import hotel.beheer.systeem.api.entities.Klant;
 import hotel.beheer.systeem.api.mappers.KlantMapper;
+import hotel.beheer.systeem.api.services.BetaalmethodeService;
 import hotel.beheer.systeem.api.services.KlantService;
 
 import jakarta.ws.rs.*;
@@ -17,13 +19,15 @@ import java.util.ArrayList;
 public class KlantController {
     private KlantService klantService;
     private KlantMapper klantMapper;
+    private BetaalmethodeService betaalmethodeService;
 
     private static final List<Klant> klantenDTO = new ArrayList<>();
 
 
-    public KlantController(KlantService klantService, KlantMapper klantMapper) {
+    public KlantController(KlantService klantService, KlantMapper klantMapper, BetaalmethodeService betaalmethodeService) {
         this.klantService = klantService;
         this.klantMapper = klantMapper;
+        this.betaalmethodeService = betaalmethodeService;
     }
 
 //    http://localhost:8080/api/klanten werkt op die server
@@ -83,12 +87,42 @@ public class KlantController {
             bestaandeKlant.setBalans(geupdateKlant.getBalans());
             // die betaalmethode_id is optioneel dus het mag leeg zijn
             // moet ik het toch zo doen
-            bestaandeKlant.setBetaalmethode(geupdateKlant.getBetaalmethode());
+
+            /*
+
+            if (geupdateKlant.getBetaalmethode() != null && geupdateKlant.getBetaalmethode().getId() != null) {
+                Betaalmethode bestaandeBetaalmethode = klantService.getBetaalmethodeById(geupdateKlant.getBetaalmethode().getId());
+                bestaandeKlant.setBetaalmethode(bestaandeBetaalmethode);
+            } else {
+                bestaandeKlant.setBetaalmethode(null);
+            }
+
+            */
+
+            // als die betaalemthode leeg is moet je je null zetten erin
+//            if (geupdateKlant.getBetaalmethode() == null && geupdateKlant.getBetaalmethode().getId() == null) {
+//                 bestaandeKlant.setBetaalmethode(null);
+//            }
+//
+//            // als die methode leeg is moet je informatie erin zetten
+//            if (geupdateKlant.getBetaalmethode() != null) {
+//                bestaandeKlant.setBetaalmethode(geupdateKlant.getBetaalmethode());
+//            }
+
+            // veilige check
+            if (geupdateKlant.getBetaalmethode() == null || geupdateKlant.getBetaalmethode().getId() == null) {
+                bestaandeKlant.setBetaalmethode(null);
+            } else {
+                Betaalmethode bestaandeBetaalmethode = betaalmethodeService.getBetaalmethodeById(geupdateKlant.getBetaalmethode().getId());
+                bestaandeKlant.setBetaalmethode(bestaandeBetaalmethode);
+            }
+
+//            bestaandeKlant.setBetaalmethode(geupdateKlant.getBetaalmethode()); // dit uitgecomment
             // nu gaan we officieel alles updaten in die DATABASE
             klantService.updateKlant(bestaandeKlant);
             // mappen van entiteit naar DTO
             KlantDTO klantDTO = klantMapper.toDTO(bestaandeKlant);
-            return Response.ok(bestaandeKlant).entity(klantDTO).build();
+            return Response.ok(klantDTO).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

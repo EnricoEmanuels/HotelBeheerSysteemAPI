@@ -5,6 +5,8 @@ import jakarta.persistence.EntityTransaction;
 import hotel.beheer.systeem.api.interfaces.EntityDao;
 
 import hotel.beheer.systeem.api.entities.*;
+import hotel.beheer.systeem.api.entities.Betaalmethode;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,23 +36,21 @@ public class KlantDao implements EntityDao<Klant> {
         return result;
     }
 
+    @Override
+    public void update(Klant klant) {
+        EntityTransaction transaction = entityManager.getTransaction();
 
+        try {
+            transaction.begin();
+            entityManager.merge(klant); // Update de klant
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace(); // error printen als het in die catch komt
+        }
+        System.out.println("Succesvol gewijzigd");
+    }
 
-//    public void saveMetBetaalmethode(Klant klant, Betaalmethode betaalmethodeId) {
-//        EntityTransaction transaction = entityManager.getTransaction();
-//
-//        try {
-//            transaction.begin();
-//            entityManager.persist(klant);
-//            entityManager.persist(betaalmethodeId);
-//            transaction.commit();
-//        } catch (Exception e) {
-//            transaction.rollback();
-//            e.printStackTrace(); // deze code gaat je jouw error wijzen als het in die catch komt
-//        }
-//        System.out.println("Succesvol ingevoegd");
-//
-//    }
 
     @Override
     public void save(Klant klant) {
@@ -100,20 +100,20 @@ public class KlantDao implements EntityDao<Klant> {
 
     }
 
-    @Override
-    public void update(Klant klant) {
-        EntityTransaction transaction = entityManager.getTransaction();
+//    public Betaalmethode findBetaalmethodeIdVanKlant(Integer betaalmethodeId) {
+//        Betaalmethode betaalmethode = null;
+//        try {
+//            betaalmethode = entityManager.find(Betaalmethode.class, betaalmethodeId.getBetaalmethode().getId() ); // error
+//
+//        } catch (Exception e) {
+//
+//            e.printStackTrace();
+//        }
+//        return betaalmethode;
+//    }
 
-        try {
-            transaction.begin();
-            entityManager.merge(klant); // Update de klant
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-            e.printStackTrace(); // error printen als het in die catch komt
-        }
-        System.out.println("Succesvol gewijzigd");
-    }
+
+
 
     // void gezet omdat ik geen waarde retourneer naar de gebruiker die de applicatie rent
     // als je wilt opwaardern moet ik eerst weten op welke klant ID ik moet storten daarom gevn wij het aan in de parameter de
@@ -420,4 +420,22 @@ public class KlantDao implements EntityDao<Klant> {
 
 
 
+
+
 }
+
+//    public void saveMetBetaalmethode(Klant klant, Betaalmethode betaalmethodeId) {
+//        EntityTransaction transaction = entityManager.getTransaction();
+//
+//        try {
+//            transaction.begin();
+//            entityManager.persist(klant);
+//            entityManager.persist(betaalmethodeId);
+//            transaction.commit();
+//        } catch (Exception e) {
+//            transaction.rollback();
+//            e.printStackTrace(); // deze code gaat je jouw error wijzen als het in die catch komt
+//        }
+//        System.out.println("Succesvol ingevoegd");
+//
+//    }

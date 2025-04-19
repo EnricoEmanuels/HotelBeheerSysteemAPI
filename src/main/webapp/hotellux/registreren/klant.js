@@ -35,6 +35,68 @@ document.addEventListener('DOMContentLoaded', () => {
         alert("Formulier is geldig en klaar voor verzenden!");
     });
 
+    // PUTT
+
+    document.getElementById('updateKlantForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const id = document.getElementById('update-id').value.trim();
+        if (!id) {
+            alert("Klant ID is verplicht!");
+            return;
+        }
+
+        const betaalmethodeValue = document.getElementById('update-betaalmethode').value.trim();
+
+        const updatedKlant = {
+            voornaam: document.getElementById('update-voornaam').value.trim(),
+            achternaam: document.getElementById('update-achternaam').value.trim(),
+            telefoon: document.getElementById('update-telefoon').value.trim(),
+            email: document.getElementById('update-email').value.trim(),
+            balans: parseFloat(document.getElementById('update-balans').value) || 0,
+            betaalmethode: betaalmethodeValue ? { id: parseInt(betaalmethodeValue) } : null
+        };
+
+
+        // const updatedKlant = {
+        //     voornaam: document.getElementById('update-voornaam').value.trim(),
+        //     achternaam: document.getElementById('update-achternaam').value.trim(),
+        //     telefoon: document.getElementById('update-telefoon').value.trim(),
+        //     email: document.getElementById('update-email').value.trim(),
+        //     balans: parseFloat(document.getElementById('update-balans').value) || 0,
+        //     betaalmethode: {
+        //         id: parseInt(document.getElementById('update-betaalmethode').value) || null
+        //     }
+        // };
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/klanten/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedKlant)
+            });
+
+            if (!response.ok) throw new Error("Update mislukt.");
+
+            // Betaalmethode ID: ${result.betaalmethode?.betaalmethode_id || 'N.v.t.'}
+
+            const result = await response.json();
+            document.getElementById('updateResponse').innerHTML = `
+              <b>Klant bijgewerkt:</b><br>
+              ID: ${id}<br>
+              Voornaam: ${result.voornaam}<br>
+              Achternaam: ${result.achternaam}<br>
+              Telefoon: ${result.telefoon}<br>
+              Email: ${result.email}<br>
+              Balans: €${result.balans}<br>
+              Betaalmethode ID: ${result.betaalmethode?.id ?? 'N.v.t.'}
+    `;
+        } catch (error) {
+            console.error("Fout bij bijwerken klant:", error);
+            document.getElementById('updateResponse').textContent = "Klantupdate mislukt.";
+        }
+    });
+
     // POST
     document.getElementById('klantForm').addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -178,52 +240,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // PUTT
-
-    document.getElementById('updateKlantForm').addEventListener('submit', async (event) => {
+    //
+    // DELETE - Klant verwijderen
+    document.getElementById('deleteKlantForm').addEventListener('submit', async (event) => {
         event.preventDefault();
+        const id = document.getElementById('klant-id').value.trim();
 
-        const id = document.getElementById('update-id').value.trim();
         if (!id) {
-            alert("Klant ID is verplicht!");
+            alert("Voer een geldig Klant ID in.");
             return;
         }
 
-        const updatedKlant = {
-            voornaam: document.getElementById('update-voornaam').value.trim(),
-            achternaam: document.getElementById('update-achternaam').value.trim(),
-            telefoon: document.getElementById('update-telefoon').value.trim(),
-            email: document.getElementById('update-email').value.trim(),
-            balans: parseFloat(document.getElementById('update-balans').value) || 0,
-            betaalmethode: {
-                id: parseInt(document.getElementById('update-betaalmethode').value) || null
-            }
-        };
-
         try {
             const response = await fetch(`http://localhost:8080/api/klanten/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedKlant)
+                method: 'DELETE',
             });
 
-            if (!response.ok) throw new Error("Update mislukt.");
-
-            const result = await response.json();
-            document.getElementById('updateResponse').innerHTML = `
-              <b>Klant bijgewerkt:</b><br>
-              ID: ${id}<br>
-              Voornaam: ${result.voornaam}<br>
-              Achternaam: ${result.achternaam}<br>
-              Telefoon: ${result.telefoon}<br>
-              Email: ${result.email}<br>
-              Balans: €${result.balans}<br>
-              Betaalmethode ID: ${result.betaalmethode?.id || 'N.v.t.'}
-    `;
-        } catch (error) {
-            console.error("Fout bij bijwerken klant:", error);
-            document.getElementById('updateResponse').textContent = "Klantupdate mislukt.";
+            const messageElement = document.getElementById('deleteMessage');
+            if (response.status === 204) {
+                messageElement.textContent = `Klant met ID ${id} succesvol verwijderd.`;
+                messageElement.style.color = "limegreen";
+            } else if (response.status === 404) {
+                messageElement.textContent = `Klant met ID ${id} bestaat niet.`;
+                messageElement.style.color = "orangered";
+            } else {
+                messageElement.textContent = `Er is iets misgegaan tijdens het verwijderen.`;
+                messageElement.style.color = "red";
+            }
+        } catch (err) {
+            console.error("Fout bij verwijderen:", error);
         }
     });
+
+
 
 });
