@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kamer Aanmaken | HotelLux</title>
     <link rel="stylesheet" href="kamers.css" />
-    <script defer src="kamer.js"></script>
+    <script src="putkamer.js"></script>
 </head>
 <body class="animated-background">
     <section >
@@ -93,13 +93,28 @@
                     <input type="number" id="kamer-update-prijs" placeholder="Prijs per maand" step="0.01" required readonly />
                 </div>
                 <button type="submit">Kamer Bijwerken</button>
+                <pre id="kamerUpdateResponse"></pre>
             </form>
-            <pre id="kamerUpdateResponse"></pre>
+
         </div>
     </section>
 
 
+    <!-- DELETE KAMER SECTION -->
+    <section class="delete-kamer-section glass-card">
+        <h2>Verwijder Kamer</h2>
+        <form id="deleteKamerForm" class="glass-form">
+            <div class="input-group">
+                <label for="kamer-id-delete">Kamer ID:</label>
+                <input type="number" id="kamer-id-delete" name="kamer-id-delete" required placeholder="Bijv. 2" />
+            </div>
+            <button type="submit" class="delete-btn">Verwijder Kamer</button>
+            <p id="deleteKamerMessage" class="delete-message"></p>
+        </form>
+    </section>
 
+
+    <script defer src="kamers.js"></script>
 
 </body>
 </html>

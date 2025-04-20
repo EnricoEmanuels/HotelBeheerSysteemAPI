@@ -1,11 +1,13 @@
 package hotel.beheer.systeem.api;
 
 import hotel.beheer.systeem.api.config.JPAConfig;
+import hotel.beheer.systeem.api.controllers.BetaalmethodeController;
 import hotel.beheer.systeem.api.controllers.KamerController;
 import hotel.beheer.systeem.api.controllers.KlantController;
 import hotel.beheer.systeem.api.dao.BetaalmethodeDao;
 import hotel.beheer.systeem.api.dao.KamerDao;
 import hotel.beheer.systeem.api.dao.KlantDao;
+import hotel.beheer.systeem.api.mappers.BetaalmethodeMapper;
 import hotel.beheer.systeem.api.mappers.KamerMapper;
 import hotel.beheer.systeem.api.mappers.KlantMapper;
 import hotel.beheer.systeem.api.services.BetaalmethodeService;
@@ -63,11 +65,19 @@ public class HotelBeheerSysteemConfig
 
         BetaalmethodeDao betaalmethodeDao = new BetaalmethodeDao(entityManager);
         BetaalmethodeService betaalmethodeService = new BetaalmethodeService(betaalmethodeDao);
+        BetaalmethodeMapper betaalmethodeMapper = new BetaalmethodeMapper();
 
 
         KlantDao klantDao = new KlantDao(entityManager);
         KlantMapper klantMapper = new KlantMapper();
         KlantService klantService = new KlantService(klantDao);
+
+        // voor betaalmethode controller
+        BetaalmethodeController betaalmethodeController = new BetaalmethodeController(betaalmethodeService, betaalmethodeMapper, klantService);
+        // betaalmethode dwingen om constructor injectie toe te passen
+        config.register(betaalmethodeController);
+
+
         KlantController klantController = new KlantController(klantService, klantMapper, betaalmethodeService);
         // dwingen om contructor injectie toe te passen
         config.register(klantController);
@@ -83,10 +93,13 @@ public class HotelBeheerSysteemConfig
         // dwingen om constructor injectie toe te passen
         config.register(kamerController);
 
+        // betaalmethode
+
+
+
 
 //        // Betaalmethode
 //
-//        BetaalmethodeDao betaalmethodeDao = new BetaalmethodeDao(entityManager);
 //        BetaalmethodeService betaalmethodeService = new BetaalmethodeService(betaalmethodeDao);
 
 

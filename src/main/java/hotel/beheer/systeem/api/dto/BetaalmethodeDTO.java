@@ -14,6 +14,8 @@ public class BetaalmethodeDTO {
     private Date datum;
     private Klant klant;
 
+    public BetaalmethodeDTO() {}
+
     public BetaalmethodeDTO(Integer id, MethodeType methode, Date datum, Klant klant) {
         this.id = id;
         this.methode = methode;

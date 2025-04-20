@@ -444,3 +444,52 @@ input, select {
     font-family: monospace;
 }
 
+/*dit is voor het deleten van een id */
+
+.delete-kamer-section {
+    margin: 40px auto;
+    padding: 20px;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    color: #fff;
+    text-align: center;
+}
+
+.delete-kamer-section .input-group {
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.delete-kamer-section input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.delete-kamer-section .delete-btn {
+    background: crimson;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.delete-kamer-section .delete-btn:hover {
+    background: darkred;
+}
+
+.delete-message {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+

@@ -1,0 +1,142 @@
+1. Waarom werkt DOMContentLoaded in een aparte JS-file wel?
+Wanneer je document.addEventListener('DOMContentLoaded', () => { ... }) gebruikt, zeg je eigenlijk:
+
+“Wacht tot de hele HTML-pagina is ingeladen en dan pas voer mijn JavaScript uit.”
+
+Als je dit gebruikt in een scriptfile die correct geladen wordt in de HTML (zoals kamer.js onderaan de pagina of met defer), dan werkt het prima.
+
+Maar als je het niet goed gekoppeld hebt aan je HTML (bijvoorbeeld een fout in <script src="...">) of als het script per ongeluk twee keer geladen wordt, dan zie je rare dingen gebeuren — zoals dat één versie wél werkt (bijvoorbeeld de downloaded.js) en de andere niet.
+
+2. Waarom zie je waarden verschijnen als je "downloaded" gebruikt, maar niet als je "kamer" noemt?
+Dat ligt bijna zeker aan hoe je het script koppelt in je HTML. Waarschijnlijk is dit wat er gebeurt:
+
+Werkt wel:
+html
+Copy
+Edit
+<script src="js/downloaded.js" defer></script>
+Werkt niet:
+html
+Copy
+Edit
+<script src="js/kamer.js"></script> <!-- Geen defer, misschien zelfs boven de body -->
+Als het script vóór je DOM geladen wordt, dan bestaat document.getElementById('kamertype') nog niet wanneer de code wordt uitgevoerd, en dus faalt die addEventListener('change', ...) stiekem.
+
+3. Hoe los je dit stabiel op, ongeacht de bestandsnaam?
+Je hebt twee opties:
+
+Optie A: Laat DOMContentLoaded staan
+Zorg dat je script wél correct gelinkt is in de HTML. Bijv.:
+
+html
+Copy
+Edit
+<script src="js/kamer.js" defer></script>
+Of zet DOMContentLoaded als fallback mechanisme, zoals je al doet:
+
+js
+Copy
+Edit
+document.addEventListener('DOMContentLoaded', () => {
+    // je code hier...
+});
+Optie B: Zet script helemaal onderaan de <body> zonder DOMContentLoaded
+Bijvoorbeeld:
+
+html
+Copy
+Edit
+<body>
+  <!-- je hele HTML -->
+
+  <script src="js/kamer.js"></script>
+</body>
+In dat geval weet je zeker dat de DOM al bestaat, dus mag je DOMContentLoaded weglaten.
+
+4. Snelle testtip voor jou:
+In je kamer.js, voeg bovenaan even dit toe:
+
+js
+Copy
+Edit
+console.log("Script geladen...");
+En onderin je DOMContentLoaded callback dit:
+
+js
+Copy
+Edit
+console.log("DOM volledig geladen...");
+Zo zie je in je browserconsole wat er daadwerkelijk wordt uitgevoerd. Als je "Script geladen..." wel ziet maar "DOM volledig geladen..." niet, dan weet je dat DOMContentLoaded niet wordt aangeroepen.
+
+-----------------------------------
+
+
+Wat doet DOMContentLoaded precies?
+js
+Copy
+Edit
+document.addEventListener('DOMContentLoaded', () => {
+  // jouw code hier...
+});
+Deze event listener zorgt ervoor dat je JavaScript pas wordt uitgevoerd nadat de hele HTML-structuur (DOM) volledig is geladen en klaar is om mee te werken.
+
+Zonder DOMContentLoaded:
+Als je gewoon dit doet in je JS-bestand:
+
+js
+Copy
+Edit
+const form = document.getElementById("kamerForm");
+...en je script staat in de <head> of wordt vroeg ingeladen, dan is de DOM vaak nog niet klaar. JavaScript probeert dan meteen die elementen te vinden (zoals het formulier), maar die bestaan nog niet op dat moment — dus getElementById geeft null, en je code werkt niet.
+
+Waarom werkt het wel bij putkamer.js?
+In jouw index.html zie ik:
+
+html
+Copy
+Edit
+<script src="putkamer.js"></script>
+...
+<script defer src="kamers.js"></script>
+Hier is het verschil:
+
+putkamer.js staat in de <head> zonder defer, dus het wordt meteen geladen.
+
+Maar jouw putkamer.js heeft een DOMContentLoaded-block, dus de code wacht netjes tot de HTML klaar is, en dan werkt alles goed.
+
+js
+Copy
+Edit
+document.addEventListener('DOMContentLoaded', () => {
+  // alles werkt netjes
+});
+Waarom werkt het niet als je DOMContentLoaded weghaalt of verplaatst?
+Als je geen DOMContentLoaded gebruikt, dan moet je wél zorgen dat je script pas wordt uitgevoerd nádat de DOM klaar is. Dat kan op 2 manieren:
+
+1. Zet je <script> tag **helemaal onderaan in <body>:
+html
+Copy
+Edit
+<body>
+  ...
+  <script src="kamers.js"></script>
+</body>
+Dan weet je zeker dat de DOM al bestaat wanneer de JS geladen wordt.
+
+2. Of gebruik defer (zoals je al doet met kamers.js):
+html
+Copy
+Edit
+<script defer src="kamers.js"></script>
+Maar dan mag je géén DOMContentLoaded nodig hebben, omdat defer automatisch wacht tot de DOM is geladen voordat het script wordt uitgevoerd.
+
+Dus wat is het verschil in jouw situatie?
+Je had waarschijnlijk het volgende gedaan:
+
+putkamer.js gebruikt wél DOMContentLoaded → werkt altijd, zelfs als het script bovenaan staat.
+
+Je kopieert die code naar kamers.js, maar daar gebruik je defer, en als je dan ook nog DOMContentLoaded toevoegt, dan zit er een dubbele wacht op laden, wat oké is.
+
+Maar als je in kamers.js geen DOMContentLoaded gebruikt en je probeert direct DOM-elementen te pakken, dan moet je vertrouwen op de defer.
+
+Als je kamers.js zonder defer en zonder DOMContentLoaded gebruikt, dan werkt het niet — want dan is de DOM nog niet klaar als je probeert elementen te pakken.
