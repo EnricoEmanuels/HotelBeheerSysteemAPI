@@ -1,0 +1,446 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a1a2e);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: white;
+}
+
+/*body {*/
+/*    background: linear-gradient(-45deg, #a1c4fd, #c2e9fb, #d4fc79, #96e6a1);*/
+/*    background-size: 400% 400%;*/
+/*    animation: gradientBG 15s ease infinite;*/
+/*    color: #1a1a1a;*/
+/*}*/
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 15px;
+    padding: 30px;
+    margin: 80px auto;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+input:read-only {
+    background-color: #e0e0e050;
+    color: #ddd;
+}
+
+button {
+    background: #1f6feb;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #3c8df3;
+}
+
+.validation-message {
+    display: none;
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* Extra animated decor */
+body::before {
+    content: '';
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    top: 20%;
+    left: -100px;
+    animation: floatLeft 20s infinite linear;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 50%;
+    bottom: 10%;
+    right: -100px;
+    animation: floatRight 25s infinite linear;
+}
+
+@keyframes floatLeft {
+    0% {transform: translateX(0);}
+    100% {transform: translateX(200vw);}
+}
+
+@keyframes floatRight {
+    0% {transform: translateX(0);}
+    100% {transform: translateX(-200vw);}
+}
+
+/*voor die correcte lijnen*/
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+label {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/*meer bubbels in verschillende richtingen */
+
+.bubbles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.bubbles span {
+    position: absolute;
+    display: block;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: moveBubbles 20s linear infinite;
+    backdrop-filter: blur(10px);
+}
+
+.bubbles span:nth-child(1) {
+    top: 10%;
+    left: 15%;
+    animation-duration: 22s;
+}
+
+.bubbles span:nth-child(2) {
+    top: 50%;
+    left: 70%;
+    animation-duration: 18s;
+    animation-direction: reverse;
+}
+
+.bubbles span:nth-child(3) {
+    top: 80%;
+    left: 40%;
+    animation-duration: 25s;
+}
+
+.bubbles span:nth-child(4) {
+    top: 30%;
+    left: 85%;
+    animation-duration: 20s;
+}
+
+.bubbles span:nth-child(5) {
+    top: 60%;
+    left: 10%;
+    animation-duration: 30s;
+}
+
+@keyframes moveBubbles {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(50px, -100px) rotate(180deg);
+    }
+    100% {
+        transform: translate(0, 0) rotate(360deg);
+    }
+}
+
+/*voor die getall*/
+
+.glass-button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    margin: 20px auto;               /* centreren + afstand */
+    display: block;                  /* zorgt dat margin: auto werkt */
+    width: fit-content;              /* knop past zich aan aan de tekst */
+    max-width: 90%;                  /* voor zekerheid op mobiel */
+    transition: background 0.3s ease;
+}
+
+.glass-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.glass-popup {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup-content {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 600px;
+    width: 90%;
+    color: #fff;
+    overflow-y: auto;
+    max-height: 80vh;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    float: right;
+}
+
+.hidden {
+    display: none;
+}
+
+/*voor die GET ID */
+
+.get-kamer-section {
+    margin: 50px auto;
+    max-width: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    color: white;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.glass-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.glass-form .form-group {
+    width: 80%;
+    margin-bottom: 15px;
+}
+
+.glass-form input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.glass-form button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    width: fit-content;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: background 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.glass-form button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.glass-result {
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+    border-radius: 15px;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.hidden {
+    display: none;
+}
+
+/*voor die PUT VAN KAMER */
+
+/*.update-section {*/
+/*    margin: 50px auto;*/
+/*    max-width: 500px;*/
+/*    background: rgba(0, 0, 0, 0.08);*/
+/*    padding: 30px;*/
+/*    border-radius: 20px;*/
+/*    backdrop-filter: blur(12px);*/
+/*    color: #305aa3;*/
+/*    box-shadow: 0 8px 30px rgba(0,0,0,0.3);*/
+/*    text-align: center;*/
+/*}*/
+
+/*.update-container h2 {*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/*.update-container form {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 15px;*/
+/*}*/
+
+/*.update-container input,*/
+/*.update-container select {*/
+/*    padding: 12px;*/
+/*    border: none;*/
+/*    border-radius: 10px;*/
+/*    font-size: 1rem;*/
+/*    background: rgba(0, 0, 0, 0.15);*/
+/*    color: #0d0d0e;*/
+/*    text-align: center;*/
+/*    backdrop-filter: blur(5px);*/
+/*}*/
+
+/*.update-container button {*/
+/*    padding: 12px;*/
+/*    font-size: 1rem;*/
+/*    border: none;*/
+/*    border-radius: 10px;*/
+/*    background: rgb(0, 0, 0);*/
+/*    color: #305aa3;*/
+/*    cursor: pointer;*/
+/*    transition: background 0.3s ease;*/
+/*    backdrop-filter: blur(6px);*/
+/*}*/
+
+/*.update-container button:hover {*/
+/*    background: rgb(48, 90, 163);*/
+/*}*/
+
+/*#kamerUpdateResponse {*/
+/*    margin-top: 20px;*/
+/*    background: rgba(255, 255, 255, 0.1);*/
+/*    padding: 15px;*/
+/*    border-radius: 12px;*/
+/*    white-space: pre-line;*/
+/*    text-align: left;*/
+/*}*/
+
+
+.update-section {
+    margin: 50px auto;
+    max-width: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(14px);
+    color: #ffffff;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    background-image: linear-gradient(135deg, #1e3c72, #2a5298);
+}
+
+.update-container h2 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.update-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.update-container input,
+.update-container select {
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: #0b0a0a;
+    text-align: center;
+    backdrop-filter: blur(5px);
+}
+
+.update-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.update-container button {
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.update-container button:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.02);
+}
+
+#kamerUpdateResponse {
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 12px;
+    white-space: pre-line;
+    text-align: left;
+    color: #fff;
+    font-family: monospace;
+}
+

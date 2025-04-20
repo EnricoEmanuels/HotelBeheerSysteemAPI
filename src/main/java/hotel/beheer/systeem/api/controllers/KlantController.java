@@ -20,6 +20,10 @@ public class KlantController {
     private KlantService klantService;
     private KlantMapper klantMapper;
     private BetaalmethodeService betaalmethodeService;
+    // ik hoefde die getBetaalmethodeById niet te maken in die klantDAO ik dan gebruiken in die service layer
+    // en vervolgens in die controller want ik had al een BetaalmethodeDAO gecreerd waarbij ik een eigen service layer hebt
+    // gemaakt daarvoor en vervolgens die betaalmethode service layer gekoppeld aan die klantController en via contructor
+    // injectie kon ik toegang krijgen tot al die eigenschappen en methodes van die dao
 
     private static final List<Klant> klantenDTO = new ArrayList<>();
 
@@ -113,6 +117,7 @@ public class KlantController {
             if (geupdateKlant.getBetaalmethode() == null || geupdateKlant.getBetaalmethode().getId() == null) {
                 bestaandeKlant.setBetaalmethode(null);
             } else {
+
                 Betaalmethode bestaandeBetaalmethode = betaalmethodeService.getBetaalmethodeById(geupdateKlant.getBetaalmethode().getId());
                 bestaandeKlant.setBetaalmethode(bestaandeBetaalmethode);
             }

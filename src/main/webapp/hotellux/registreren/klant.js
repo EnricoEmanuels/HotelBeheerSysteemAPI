@@ -35,68 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
         alert("Formulier is geldig en klaar voor verzenden!");
     });
 
-    // PUTT
-
-    document.getElementById('updateKlantForm').addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const id = document.getElementById('update-id').value.trim();
-        if (!id) {
-            alert("Klant ID is verplicht!");
-            return;
-        }
-
-        const betaalmethodeValue = document.getElementById('update-betaalmethode').value.trim();
-
-        const updatedKlant = {
-            voornaam: document.getElementById('update-voornaam').value.trim(),
-            achternaam: document.getElementById('update-achternaam').value.trim(),
-            telefoon: document.getElementById('update-telefoon').value.trim(),
-            email: document.getElementById('update-email').value.trim(),
-            balans: parseFloat(document.getElementById('update-balans').value) || 0,
-            betaalmethode: betaalmethodeValue ? { id: parseInt(betaalmethodeValue) } : null
-        };
-
-
-        // const updatedKlant = {
-        //     voornaam: document.getElementById('update-voornaam').value.trim(),
-        //     achternaam: document.getElementById('update-achternaam').value.trim(),
-        //     telefoon: document.getElementById('update-telefoon').value.trim(),
-        //     email: document.getElementById('update-email').value.trim(),
-        //     balans: parseFloat(document.getElementById('update-balans').value) || 0,
-        //     betaalmethode: {
-        //         id: parseInt(document.getElementById('update-betaalmethode').value) || null
-        //     }
-        // };
-
-        try {
-            const response = await fetch(`http://localhost:8080/api/klanten/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedKlant)
-            });
-
-            if (!response.ok) throw new Error("Update mislukt.");
-
-            // Betaalmethode ID: ${result.betaalmethode?.betaalmethode_id || 'N.v.t.'}
-
-            const result = await response.json();
-            document.getElementById('updateResponse').innerHTML = `
-              <b>Klant bijgewerkt:</b><br>
-              ID: ${id}<br>
-              Voornaam: ${result.voornaam}<br>
-              Achternaam: ${result.achternaam}<br>
-              Telefoon: ${result.telefoon}<br>
-              Email: ${result.email}<br>
-              Balans: €${result.balans}<br>
-              Betaalmethode ID: ${result.betaalmethode?.id ?? 'N.v.t.'}
-    `;
-        } catch (error) {
-            console.error("Fout bij bijwerken klant:", error);
-            document.getElementById('updateResponse').textContent = "Klantupdate mislukt.";
-        }
-    });
-
     // POST
     document.getElementById('klantForm').addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -141,6 +79,59 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Er ging iets mis bij het registreren.");
         }
     });
+
+
+    // PUTT
+
+    document.getElementById('updateKlantForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const id = document.getElementById('update-id').value.trim();
+        if (!id) {
+            alert("Klant ID is verplicht!");
+            return;
+        }
+
+        const betaalmethodeValue = document.getElementById('update-betaalmethode').value.trim();
+
+        const updatedKlant = {
+            voornaam: document.getElementById('update-voornaam').value.trim(),
+            achternaam: document.getElementById('update-achternaam').value.trim(),
+            telefoon: document.getElementById('update-telefoon').value.trim(),
+            email: document.getElementById('update-email').value.trim(),
+            balans: parseFloat(document.getElementById('update-balans').value) || 0,
+            betaalmethode: betaalmethodeValue ? { id: parseInt(betaalmethodeValue) } : null
+        };
+
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/klanten/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedKlant)
+            });
+
+            if (!response.ok) throw new Error("Update mislukt.");
+
+            // Betaalmethode ID: ${result.betaalmethode?.betaalmethode_id || 'N.v.t.'}
+
+            const result = await response.json();
+            document.getElementById('updateResponse').innerHTML = `
+              <b>Klant bijgewerkt:</b><br>
+              ID: ${id}<br>
+              Voornaam: ${result.voornaam}<br>
+              Achternaam: ${result.achternaam}<br>
+              Telefoon: ${result.telefoon}<br>
+              Email: ${result.email}<br>
+              Balans: €${result.balans}<br>
+              Betaalmethode ID: ${result.betaalmethode?.id ?? 'N.v.t.'}
+    `;
+        } catch (error) {
+            console.error("Fout bij bijwerken klant:", error);
+            document.getElementById('updateResponse').textContent = "Klantupdate mislukt.";
+        }
+    });
+
 
     // GET ALL Klanten
 
@@ -271,6 +262,52 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Fout bij verwijderen:", error);
         }
     });
+
+    // specifieke ID ophalen
+
+    document.getElementById('getKamerForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const id = document.getElementById('kamer-id').value.trim();
+        const resultBox = document.getElementById('kamerInfo');
+        const details = document.getElementById('kamerDetails');
+
+        if (!id) {
+            details.innerHTML = "Voer een geldig kamer-ID in.";
+            resultBox.classList.remove('hidden');
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/kamers/${id}`);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    details.innerHTML = `Kamer met ID <b>${id}</b> niet gevonden.`;
+                } else {
+                    details.innerHTML = `Fout: ${response.status} - ${response.statusText}`;
+                }
+                resultBox.classList.remove('hidden');
+                return;
+            }
+
+            const kamer = await response.json();
+
+            details.innerHTML = `
+            <b>ID:</b> ${kamer.id}<br>
+            <b>Type:</b> ${kamer.kamertype}<br>
+            <b>Aantal Bedden:</b> ${kamer.aantalbedden}<br>
+            <b>Prijs per Maand:</b> € ${kamer.prijspermaand}<br>
+        `;
+
+            resultBox.classList.remove('hidden');
+        } catch (error) {
+            console.error('Fout bij het ophalen van kamer:', error);
+            details.innerHTML = "Er is een fout opgetreden bij het ophalen van de kamer.";
+            resultBox.classList.remove('hidden');
+        }
+    });
+
 
 
 

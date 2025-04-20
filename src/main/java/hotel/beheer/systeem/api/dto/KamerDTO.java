@@ -4,6 +4,7 @@ import hotel.beheer.systeem.api.entities.Kamer;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
 import hotel.beheer.systeem.api.entities.Kamer.KamerType;
 
 public class KamerDTO {

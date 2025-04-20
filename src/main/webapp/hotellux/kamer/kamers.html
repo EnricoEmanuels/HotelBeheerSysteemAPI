@@ -1,10 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kamer Aanmaken | HotelLux</title>
+    <link rel="stylesheet" href="kamers.css" />
+    <script defer src="kamer.js"></script>
 </head>
-<body>
+<body class="animated-background">
+    <section >
+        <div class="form-container">
+            <h2>Nieuwe Kamer Toevoegen</h2>
+            <form id="kamerForm">
+                <div class="form-group">
+                    <label for="kamertype">Kamer Type</label>
+                    <select id="kamertype" name="kamertype">
+                        <option value="">Selecteer...</option>
+                        <option value="goedkoop">Goedkoop</option>
+                        <option value="normaal">Normaal</option>
+                        <option value="deftig">Deftig</option>
+                    </select>
+                    <span class="validation-message" id="kamertype-validation">Kies een kamertype.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="aantalbedden">Aantal Bedden</label>
+                    <input type="number" id="aantalbedden" name="aantalbedden" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label for="prijspermaand">Prijs per maand ($)</label>
+                    <input type="number" id="prijspermaand" name="prijspermaand" step="0.01" readonly />
+                </div>
+
+                <button type="submit">Kamer Aanmaken</button>
+            </form>
+
+            <pre id="createResponse"></pre>
+        </div>
+    </section>
+
+    <!-- ALLE KAMERS OPHALEN - GLASSY POPUP -->
+    <section>
+        <button id="fetchKamersButton" class="glass-button">Toon Alle Kamers</button>
+
+        <div id="kamersPopup" class="glass-popup hidden">
+            <div class="popup-content">
+                <span id="closeKamersPopup" class="close-button">&times;</span>
+                <h2>Alle Kamers</h2>
+                <pre id="kamers"></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- KAMER OP ID OPHALEN - GLASSY SECTION -->
+    <section class="get-kamer-section">
+        <h2>Zoek een Kamer op ID</h2>
+        <form id="getKamerForm" class="glass-form">
+            <div class="form-group">
+                <label for="kamer-id">Kamer ID:</label>
+                <input type="number" id="kamer-id" required placeholder="Bijv. 1">
+            </div>
+            <button type="submit" class="glass-button">Zoek Kamer</button>
+        </form>
+
+        <div id="kamerInfo" class="glass-result hidden">
+            <h3>Gevonden Kamer</h3>
+            <div id="kamerDetails"></div>
+        </div>
+    </section>
+
+    <!-- KAMER BIJWERKEN (PUT) -->
+    <section class="update-section">
+        <div class="form-container update-container">
+            <h2>Kamergegevens Bijwerken</h2>
+            <form id="updateKamerForm">
+                <div class="form-group">
+                    <input type="number" id="kamer-update-id" placeholder="Kamer ID (verplicht)" required />
+                </div>
+                <div class="form-group">
+                    <select id="kamer-update-type" required>
+                        <option value="" disabled selected>Selecteer kamertype</option>
+                        <option value="goedkoop">Goedkoop</option>
+                        <option value="normaal">Normaal</option>
+                        <option value="deftig">Deftig</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="kamer-update-bedden" placeholder="Aantal bedden" min="1" required readonly />
+                </div>
+                <div class="form-group">
+                    <input type="number" id="kamer-update-prijs" placeholder="Prijs per maand" step="0.01" required readonly />
+                </div>
+                <button type="submit">Kamer Bijwerken</button>
+            </form>
+            <pre id="kamerUpdateResponse"></pre>
+        </div>
+    </section>
+
+
+
 
 </body>
 </html>

@@ -50,3 +50,117 @@ Copy
 Edit
 betaalmethode_id INT
 Dat betekent: mag null zijn. Je bent dus ook aan de database-kant correct bezig.
+
+
+---------------------------------------------------------------------------
+dubbel verificattie voor KAMERCONTROLLER
+
+1. GET Alle Kamers
+java
+Copy
+Edit
+@GET
+@Path("")
+@Produces(MediaType.APPLICATION_JSON)
+public List<Kamer> getAlleKamers() {
+    return kamerService.getAllKamers();
+}
+✓ Goed. Simpel, efficiënt. Als je DTO's terug wil geven in plaats van entiteiten, kan je hier eventueel mappen.
+
+2. GET Kamer by ID
+java
+Copy
+Edit
+@GET
+@Path("/{id}")
+@Produces(MediaType.APPLICATION_JSON)
+public Response getkamerById(@PathParam("id") int id) {
+    Kamer kamerById = kamerService.findKamerById(id);
+    if (kamerById == null) {
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+    KamerDTO kamerDTO = kamerMapper.toKamerDTO(kamerById);
+    return Response.status(Response.Status.OK).entity(kamerDTO).build();
+}
+✓ Goed. Je hebt defensieve codering toegepast, en de mapping naar DTO is keurig.
+
+3. POST Kamer
+java
+Copy
+Edit
+@POST
+@Path("/create")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public Response createKamer(Kamer kamer) {
+    Kamer kameropslaan = kamerService.saveKamer(kamer);
+    KamerDTO kamerDTO = kamerMapper.toKamerDTO(kameropslaan);
+    return Response.status(Response.Status.OK).entity(kamerDTO).build();
+}
+✓ Goed. Je gebruikt gewoon de entity als input, en mapped het terug naar DTO — prima aanpak. Omdat kamertype een enum is, moet je er alleen op letten dat de client lowercase waarden meestuurt ("goedkoop", "normaal", "deftig"). Anders krijg je een enum-parsing error.
+
+4. PUT Kamer
+java
+Copy
+Edit
+@PUT
+@Path("/{id}")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public Response updateKamer(@PathParam("id") int id, Kamer kamer) {
+    Kamer bestaatDezeKamer = kamerService.findKamerById(id);
+    if (bestaatDezeKamer == null) {
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    bestaatDezeKamer.setKamertype(kamer.getKamertype());
+    bestaatDezeKamer.setAantalbedden(kamer.getAantalbedden());
+    bestaatDezeKamer.setPrijsPerMaand(kamer.getPrijsPerMaand());
+
+    kamerService.updateKamer(bestaatDezeKamer);
+    KamerDTO kamerDTO = kamerMapper.toKamerDTO(bestaatDezeKamer);
+    return Response.ok(kamerDTO).build();
+}
+✓ Goed. Nette defensieve check. Je update alleen wat nodig is, zonder ID te overschrijven. Je hebt hier best practice gevolgd.
+
+5. DELETE Kamer
+java
+Copy
+Edit
+@DELETE
+@Path("/{id}")
+@Produces(MediaType.APPLICATION_JSON)
+public Response deleteKamerById(@PathParam("id") int id) {
+    Kamer bestaatDezeId = kamerService.findKamerById(id);
+    if (bestaatDezeId == null) {
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+    kamerService.deleteById(id);
+    return Response.status(Response.Status.OK).build();
+}
+✓ Goed. Simpele defensieve check. Je zou hier eventueel nog een id == 0 check kunnen toevoegen voor extra robuustheid:
+
+java
+Copy
+Edit
+if (id <= 0 || bestaatDezeId == null) {
+    return Response.status(Response.Status.NOT_FOUND).build();
+}
+Extra opmerking over ENUM gebruik
+Je hebt dit goed aangepakt:
+
+java
+Copy
+Edit
+@Enumerated(EnumType.STRING)
+@Column(name = "kamertype", nullable = false)
+private KamerType kamertype;
+En in je enum:
+
+java
+Copy
+Edit
+public enum KamerType {
+    goedkoop, normaal, deftig
+}
+Let op: Omdat MySQL de enumwaarden als lowercase opslaat, moet je in je frontend of Postman ook exact "goedkoop" (en niet "GOEDKOOP" of "Goedkoop") gebruiken.

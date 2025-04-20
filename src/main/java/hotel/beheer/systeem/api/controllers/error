@@ -1,0 +1,22 @@
+HTTP ERROR 500 Request failed.
+URI:	/api/kamers/
+STATUS:	500
+MESSAGE:	Request failed.
+SERVLET:	org.glassfish.jersey.servlet.ServletContainer-4f063c0a
+Powered by Jetty:// 11.0.24
+
+    ... 38 more
+Caused by: java.lang.NoSuchMethodException: Could not find a suitable constructor in hotel.beheer.systeem.api.controllers.KamerController class.
+        at org.glassfish.jersey.inject.hk2.JerseyClassAnalyzer.getConstructor(JerseyClassAnalyzer.java:168)
+        at org.jvnet.hk2.internal.Utilities.getConstructor(Utilities.java:157)
+
+// ik moet het dwingen om die constructor injectie te gerbuiken dus ik ga het dwingne met deze regel
+
+// kamer dao
+        KamerDao kamerDao = new KamerDao(entityManager);
+        // kamer service
+        KamerService kamerService = new KamerService(kamerDao);
+        // kamerController
+        KamerController kamerController = new KamerController(kamerService);
+        // dwingen om constructor injectie toe te passen
+        config.register(kamerController);

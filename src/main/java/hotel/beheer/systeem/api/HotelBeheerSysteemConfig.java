@@ -1,11 +1,15 @@
 package hotel.beheer.systeem.api;
 
 import hotel.beheer.systeem.api.config.JPAConfig;
+import hotel.beheer.systeem.api.controllers.KamerController;
 import hotel.beheer.systeem.api.controllers.KlantController;
 import hotel.beheer.systeem.api.dao.BetaalmethodeDao;
+import hotel.beheer.systeem.api.dao.KamerDao;
 import hotel.beheer.systeem.api.dao.KlantDao;
+import hotel.beheer.systeem.api.mappers.KamerMapper;
 import hotel.beheer.systeem.api.mappers.KlantMapper;
 import hotel.beheer.systeem.api.services.BetaalmethodeService;
+import hotel.beheer.systeem.api.services.KamerService;
 import hotel.beheer.systeem.api.services.KlantService;
 
 import jakarta.persistence.EntityManager;
@@ -65,7 +69,20 @@ public class HotelBeheerSysteemConfig
         KlantMapper klantMapper = new KlantMapper();
         KlantService klantService = new KlantService(klantDao);
         KlantController klantController = new KlantController(klantService, klantMapper, betaalmethodeService);
+        // dwingen om contructor injectie toe te passen
         config.register(klantController);
+
+        // kamer dao
+        KamerDao kamerDao = new KamerDao(entityManager);
+        // kamer service
+        KamerService kamerService = new KamerService(kamerDao);
+        // kamer Mapper
+        KamerMapper kamerMapper = new KamerMapper();
+        // kamerController
+        KamerController kamerController = new KamerController(kamerService, kamerMapper);
+        // dwingen om constructor injectie toe te passen
+        config.register(kamerController);
+
 
 //        // Betaalmethode
 //
