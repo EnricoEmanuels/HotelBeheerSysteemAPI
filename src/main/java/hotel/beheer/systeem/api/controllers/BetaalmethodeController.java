@@ -7,6 +7,7 @@ import hotel.beheer.systeem.api.mappers.BetaalmethodeMapper;
 import hotel.beheer.systeem.api.mappers.KamerMapper;
 import hotel.beheer.systeem.api.services.BetaalmethodeService;
 import hotel.beheer.systeem.api.services.KlantService;
+
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
@@ -15,6 +16,8 @@ import jakarta.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+
+// ------------------------------------------NOG niet uitgeprobeert via die frontend
 
 @Path("/betaalmethodes")
 public class BetaalmethodeController {

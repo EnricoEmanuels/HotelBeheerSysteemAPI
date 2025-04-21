@@ -1,15 +1,19 @@
 package hotel.beheer.systeem.api;
 
 import hotel.beheer.systeem.api.config.JPAConfig;
+import hotel.beheer.systeem.api.controllers.BeschikbareKamersController;
 import hotel.beheer.systeem.api.controllers.BetaalmethodeController;
 import hotel.beheer.systeem.api.controllers.KamerController;
 import hotel.beheer.systeem.api.controllers.KlantController;
+import hotel.beheer.systeem.api.dao.BeschikbareKamerDao;
 import hotel.beheer.systeem.api.dao.BetaalmethodeDao;
 import hotel.beheer.systeem.api.dao.KamerDao;
 import hotel.beheer.systeem.api.dao.KlantDao;
+import hotel.beheer.systeem.api.mappers.BeschikbareKamerMapper;
 import hotel.beheer.systeem.api.mappers.BetaalmethodeMapper;
 import hotel.beheer.systeem.api.mappers.KamerMapper;
 import hotel.beheer.systeem.api.mappers.KlantMapper;
+import hotel.beheer.systeem.api.services.BeschikbareKamersService;
 import hotel.beheer.systeem.api.services.BetaalmethodeService;
 import hotel.beheer.systeem.api.services.KamerService;
 import hotel.beheer.systeem.api.services.KlantService;
@@ -67,6 +71,12 @@ public class HotelBeheerSysteemConfig
         BetaalmethodeService betaalmethodeService = new BetaalmethodeService(betaalmethodeDao);
         BetaalmethodeMapper betaalmethodeMapper = new BetaalmethodeMapper();
 
+        BeschikbareKamerDao beschikbareKamerDao = new BeschikbareKamerDao(entityManager);
+        BeschikbareKamersService beschikbareKamersService = new BeschikbareKamersService(beschikbareKamerDao);
+        BeschikbareKamerMapper beschikbareKamerMapper = new BeschikbareKamerMapper();
+
+
+
 
         KlantDao klantDao = new KlantDao(entityManager);
         KlantMapper klantMapper = new KlantMapper();
@@ -86,6 +96,10 @@ public class HotelBeheerSysteemConfig
         KamerDao kamerDao = new KamerDao(entityManager);
         // kamer service
         KamerService kamerService = new KamerService(kamerDao);
+
+        BeschikbareKamersController beschikbareKamersController = new BeschikbareKamersController(beschikbareKamersService, beschikbareKamerMapper, kamerService);
+        config.register(beschikbareKamersController);
+
         // kamer Mapper
         KamerMapper kamerMapper = new KamerMapper();
         // kamerController

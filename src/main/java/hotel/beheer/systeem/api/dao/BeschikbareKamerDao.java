@@ -15,6 +15,8 @@ public class BeschikbareKamerDao implements EntityDao<BeschikbareKamer> {
         this.entityManager = entityManager;
     }
 
+    // hier ga je ook kamers krijgen die niet meer beschikbaar zijn dus oppassen liever gebruik je
+    // deze methode alleBeschikbareKamers()  hier lrijg je alle kamers die niet meer beschikbaar zijn
     @Override
     public List<BeschikbareKamer> findAll() {
         List<BeschikbareKamer> result = new ArrayList<>();
