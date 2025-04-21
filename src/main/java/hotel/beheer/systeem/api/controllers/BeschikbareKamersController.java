@@ -36,6 +36,9 @@ public class BeschikbareKamersController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBeschikbareKamerById(@PathParam("id") int id) {
+
+        // dit is essentieel @PathParam("id") int id) anders gaat het niet werken in die @GET
+
         // id zoeken en opslaan in een variabel
         BeschikbareKamer beschikbareKamerById = beschikbareKamersService.findBeschikbareKamerById(id);
         // als die ID niet bestaat retourneer not found
@@ -66,7 +69,10 @@ public class BeschikbareKamersController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBeschikbareKamer(int id , BeschikbareKamer updatebeschikbareKamer) {
+    public Response updateBeschikbareKamer(@PathParam("id") int id , BeschikbareKamer updatebeschikbareKamer) {
+
+        // dit is essentieel @PathParam("id") int id) anders gaat het niet werken in die @PUT
+
         // eerst id zoeken en opslaa in een variabel
         BeschikbareKamer beschikbareKamer = beschikbareKamersService.findBeschikbareKamerById(id);
         // als die variabel niet besstaat == false
@@ -89,6 +95,9 @@ public class BeschikbareKamersController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteBeschikbareKamer(@PathParam("id") int id) {
+
+        // dit is essentieel @PathParam("id") int id) anders gaat het niet werken in die @DELETE
+
         // id zoeken
         BeschikbareKamer beschikbareKamerById = beschikbareKamersService.findBeschikbareKamerById(id);
         // als het niet bestaat == false

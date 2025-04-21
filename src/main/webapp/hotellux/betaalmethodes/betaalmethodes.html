@@ -1,10 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Betaalmethode Toevoegen</title>
+    <link rel="stylesheet" href="betaalmethodes.css">
 </head>
-<body>
+<body class="animated-background">
+<section>
+    <div class="form-container">
+        <h2>Nieuwe Betaalmethode Toevoegen</h2>
+        <form id="betaalmethodeForm">
+            <div class="form-group">
+                <label for="methode">Methode</label>
+                <select id="methode" name="methode">
+                    <option value="">Selecteer een methode...</option>
+                    <option value="crypto">Crypto</option>
+                    <option value="creditcard">Creditcard</option>
+                    <option value="contant">Contant</option>
+                </select>
+                <span class="validation-message" id="methode-validation">Kies een methode.</span>
+            </div>
 
+            <div class="form-group">
+                <label for="datum">Datum</label>
+                <input type="date" id="datum" name="datum">
+                <span class="validation-message" id="datum-validation">Voer een datum in.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="klant_id">Klant ID</label>
+                <input type="number" id="klant_id" name="klant_id">
+                <span class="validation-message" id="klant_id-validation">Voer een klant ID in.</span>
+            </div>
+
+            <button type="submit">Toevoegen</button>
+        </form>
+        <pre id="createResponse"></pre>
+    </div>
+</section>
+
+<!-- ALLE BETAALMETHODES OPHALEN - GLASSY POPUP -->
+<section>
+    <div class="fetch-container">
+        <button id="fetchBetaalmethodesButton" class="glass-button">Toon Betaalmethodes</button>
+
+        <div id="betaalmethodesPopup" class="glass-popup hidden">
+            <div class="popup-content">
+                <span id="closeBetaalmethodesPopup" class="close-button">&times;</span>
+                <h2>Alle Betaalmethodes</h2>
+                <pre id="betaalmethodes"></pre>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- BETAALMETHODE OP ID OPHALEN - GLASSY SECTION -->
+<section class="get-betaalmethode-section">
+    <h2>Zoek een Betaalmethode op ID</h2>
+    <form id="getBetaalmethodeForm" class="glass-form">
+        <div class="form-group">
+            <label for="betaalmethode-id">Betaalmethode ID:</label>
+            <input type="number" id="betaalmethode-id" required placeholder="Bijv. 1">
+        </div>
+        <button type="submit" class="glass-button">Zoek Betaalmethode</button>
+    </form>
+
+    <div id="betaalmethodeInfo" class="glass-result hidden">
+        <h3>Gevonden Betaalmethode</h3>
+        <div id="betaalmethodeDetails"></div>
+    </div>
+</section>
+
+
+
+
+<script src="betaalmethodes.js"></script>
 </body>
 </html>
