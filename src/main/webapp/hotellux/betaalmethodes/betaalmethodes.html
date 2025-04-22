@@ -70,6 +70,41 @@
     </div>
 </section>
 
+<!--dit is voor die PUT -->
+<section class="update-section">
+    <div class="form-container update-container">
+        <h2>Betaalmethode Bijwerken</h2>
+        <form id="updateBetaalmethodeForm">
+            <div class="form-group">
+                <input type="number" id="put-betaalmethode-id" placeholder="Betaalmethode ID (verplicht)" required />
+            </div>
+
+            <div class="form-group">
+                <select id="put-methode" required>
+                    <option value="">Selecteer een methode</option>
+                    <option value="crypto">Crypto</option>
+                    <option value="creditcard">Creditcard</option>
+                    <option value="contant">Contact</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="date" id="put-datum" placeholder="Datum (verplicht)" required />
+            </div>
+
+            <div class="form-group">
+                <input type="number" id="put-klant-id" placeholder="Klant ID (verplicht)" required />
+            </div>
+
+            <button type="submit">Bijwerken</button>
+        </form>
+
+        <pre id="updateBetaalmethodeResponse"></pre>
+    </div>
+</section>
+
+
+
 
 
 

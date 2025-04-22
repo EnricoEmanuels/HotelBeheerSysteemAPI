@@ -261,8 +261,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // PUTT
+    document.getElementById('updateBetaalmethodeForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
 
+        const id = document.getElementById('put-betaalmethode-id').value.trim();
+        const methode = document.getElementById('put-methode').value.trim();
+        const datum = document.getElementById('put-datum').value;
+        const klantId = document.getElementById('put-klant-id').value.trim();
 
+        if (!id || !methode || !datum || !klantId) {
+            alert("Vul alle velden correct in.");
+            return;
+        }
+
+        try {
+            const klantResponse = await fetch(`http://localhost:8080/api/klanten/${klantId}`);
+            if (!klantResponse.ok) {
+                if (klantResponse.status === 404) {
+                    document.getElementById('updateBetaalmethodeResponse').textContent = `Klant met ID ${klantId} bestaat niet.`;
+                    return;
+                } else {
+                    throw new Error("Fout bij klant-validatie.");
+                }
+            }
+
+            const updatedBetaalmethode = {
+                id: parseInt(id),
+                methode: methode,
+                datum: datum,
+                klant: {
+                    id: parseInt(klantId)
+                }
+            };
+
+            const response = await fetch(`http://localhost:8080/api/betaalmethodes/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedBetaalmethode)
+            });
+
+            if (!response.ok) throw new Error("Update mislukt.");
+
+            document.getElementById('updateBetaalmethodeResponse').textContent = `Betaalmethode met ID ${id} is succesvol bijgewerkt.`;
+
+        } catch (error) {
+            console.error("Fout bij update:", error);
+            document.getElementById('updateBetaalmethodeResponse').textContent = "Update mislukt. Controleer de console.";
+        }
+    });
 
 
 });

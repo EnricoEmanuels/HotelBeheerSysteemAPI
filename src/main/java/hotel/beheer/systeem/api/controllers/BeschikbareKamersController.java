@@ -80,7 +80,8 @@ public class BeschikbareKamersController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         // id != null informatie updaten via die bestaande entiteit
-        beschikbareKamer.setId(updatebeschikbareKamer.getId());
+//        beschikbareKamer.setId(updatebeschikbareKamer.getId());
+        beschikbareKamer.setId(id);
         beschikbareKamer.setBeschikbareKamerAlternatief(updatebeschikbareKamer.getBeschikbareKamerAlternatief());
         beschikbareKamer.setKamer(updatebeschikbareKamer.getKamer());
 

@@ -66,6 +66,11 @@ public class BetaalmethodeDao implements EntityDao<Betaalmethode> {
 
         try {
             transaction.begin();
+
+            // Extra check om klant op te halen:
+            Klant klant = entityManager.find(Klant.class, betaalmethode.getKlant().getId());
+            betaalmethode.setKlant(klant);
+
             entityManager.merge(betaalmethode); // Update de klant
             transaction.commit();
         } catch (Exception e) {

@@ -264,3 +264,67 @@ button:hover {
     background:#558de8;
 }
 
+/*voor die put */
+
+.update-section {
+    display: flex;
+    justify-content: center;
+    padding: 50px 20px;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+input, select {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+input::placeholder {
+    color: #eee;
+}
+
+button {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+pre {
+    color: white;
+    margin-top: 20px;
+}
+
+
