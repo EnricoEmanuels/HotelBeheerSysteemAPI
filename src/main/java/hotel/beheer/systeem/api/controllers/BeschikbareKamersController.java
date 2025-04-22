@@ -13,7 +13,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
-// ----------------------------------------nog niet geprobeert via die frontend
+// ----------------------------------------BeschikbareKamersController id afff
 
 @Path("/beschikbarekamers")
 public class BeschikbareKamersController {

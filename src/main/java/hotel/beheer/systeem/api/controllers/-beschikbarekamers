@@ -1,0 +1,111 @@
+http://localhost:8080/api/kamers/
+
+No serializer found for class org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor and no properties discovered
+ to create BeanSerializer (to avoid exception, disable SerializationFeature.FAIL_ON_EMPTY_BEANS) (through reference
+ chain: java.util.ArrayList[0]->hotel.beheer.systeem.api.entities.Kamer$HibernateProxy$5yqHI7NK["hibernateLazyInitializer"])
+
+ http://localhost:8080/api/beschikbarekamers/
+
+ No serializer found for class org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor and no properties discovered to
+  create BeanSerializer (to avoid exception, disable SerializationFeature.FAIL_ON_EMPTY_BEANS) (through reference chain:
+  java.util.ArrayList[0]->hotel.beheer.systeem.api.entities.BeschikbareKamer["kamer"]->hotel.beheer.systeem.api.entities.Kamer$HibernateProxy$5yqHI7NK["hibernateLazyInitializer"])
+------
+
+wat ik heb gedaan het probleem wprdt gegenereerd door die fetch lazy loading en tussen die foreign key van kamer
+beschikbarekame dus wat ik heb gedaan is ik het het veranderd van lazy loading naar EAGER en dan ging het wel
+
+
+------------
+
+antwoorden
+
+Wat er gebeurt
+Wanneer jij via je controller @GET doet op /api/kamers of /api/beschikbarekamers, probeert Jackson (de JSON-serializer) je entiteiten om te zetten naar JSON. Maar die entiteiten bevatten lazy-loaded relaties — in jouw geval dus BeschikbareKamer met een lazy-loaded Kamer.
+
+Hibernate genereert dan een HibernateProxy, zoals je ziet in deze fout:
+
+pgsql
+Copy
+Edit
+No serializer found for class org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor
+Jackson weet niet hoe hij die proxy-klasse (ByteBuddyInterceptor) moet serialiseren. Daarom gooit hij die error.
+
+Waarom het wel werkt bij klanten en betaalmethodes
+Waarschijnlijk heb je bij Klant of Betaalmethode géén @ManyToOne of @OneToOne die lazy-loaded entiteiten teruggeeft bij een GET. Of je gebruikt daar geen geneste objecten die met proxies komen.
+
+De oplossing
+Je hebt twee hoofdmogelijkheden om dit op te lossen:
+
+1. DTO’s gebruiken (aanbevolen & proper)
+Gebruik in je controller niet direct de entity (Kamer, BeschikbareKamer, etc.), maar zet ze eerst om in DTO’s. Die bevatten alleen de data die je echt wil tonen (zonder Hibernate proxies, zonder eindeloze nested objecten).
+
+Bijvoorbeeld:
+
+java
+Copy
+Edit
+public class BeschikbareKamerDTO {
+    public Long id;
+    public String beschikbaarheid;
+    public Long kamerId;
+    public String kamerType;
+    public double prijsPerMaand;
+
+    public BeschikbareKamerDTO(BeschikbareKamer bk) {
+        this.id = bk.getId();
+        this.beschikbaarheid = bk.getBeschikbaarheid().name();
+        if (bk.getKamer() != null) {
+            this.kamerId = bk.getKamer().getId();
+            this.kamerType = bk.getKamer().getKamertype().name();
+            this.prijsPerMaand = bk.getKamer().getPrijsPerMaand();
+        }
+    }
+}
+En dan in je controller:
+
+java
+Copy
+Edit
+@GET
+@Path("")
+@Produces(MediaType.APPLICATION_JSON)
+public List<BeschikbareKamerDTO> getAllBeschikbareKamers() {
+    return beschikbareKamersService.getAllBeschikbareKamers()
+        .stream()
+        .map(BeschikbareKamerDTO::new)
+        .collect(Collectors.toList());
+}
+Doe dit ook bij /api/kamers.
+
+2. Of: Jackson instructies geven hoe om te gaan met lazy loading
+Niet aanbevolen op lange termijn, maar voor snel fixen kun je dit proberen:
+
+Optie A: hibernate5-module toevoegen aan Maven
+
+xml
+Copy
+Edit
+<dependency>
+    <groupId>com.fasterxml.jackson.datatype</groupId>
+    <artifactId>jackson-datatype-hibernate5</artifactId>
+    <version>2.15.3</version> <!-- of je huidige versie -->
+</dependency>
+En dan in je configuratie:
+
+java
+Copy
+Edit
+ObjectMapper mapper = new ObjectMapper();
+mapper.registerModule(new Hibernate5Module());
+Of als je Spring gebruikt:
+
+java
+Copy
+Edit
+@Bean
+public ObjectMapper objectMapper() {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.registerModule(new Hibernate5Module());
+    return mapper;
+}
+Maar dit maakt de JSON wat "zwaarder" en kan ook onverwacht gedrag geven. Daarom: liever DTO’s gebruiken.

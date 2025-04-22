@@ -20,7 +20,7 @@ public class BeschikbareKamer {
 //    @Column(name = "beschikbaar", nullable = false, length = 255)
 //    private String beschikbaar;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "kamer_id", referencedColumnName = "id")
     private Kamer kamer;
 

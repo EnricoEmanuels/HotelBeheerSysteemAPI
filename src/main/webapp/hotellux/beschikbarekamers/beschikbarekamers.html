@@ -36,6 +36,82 @@
     <pre id="beschikbareKamerResponse"></pre>
 </section>
 
+<!--get ALL-->
+
+<section>
+    <button id="fetchBeschikbareKamersButton" class="glass-button">Toon Alle Beschikbare Kamers</button>
+
+    <div id="beschikbareKamersPopup" class="glass-popup hidden">
+        <div class="popup-content">
+            <span id="closeBeschikbareKamersPopup" class="close-button">&times;</span>
+            <h2>Alle Beschikbare Kamers</h2>
+<!--            <pre id="beschikbareKamers"></pre>-->
+            <div id="beschikbareKamers" class="beschikbare-lijst"></div>
+
+        </div>
+    </div>
+</section>
+
+<!-- GET Beschikbare Kamer by ID -->
+<section>
+    <button id="getBeschikbareKamerByIdBtn" class="glass-button">Zoek Beschikbare Kamer op ID</button>
+
+    <div id="beschikbareKamerByIdPopup" class="glass-popup hidden">
+        <div class="popup-content">
+            <span class="close-button" id="closeBeschikbareKamerPopup">&times;</span>
+            <h2>Beschikbare Kamer zoeken</h2>
+            <form id="beschikbareKamerByIdForm">
+                <div class="form-group">
+                    <label for="beschikbareKamerIdInput">Beschikbare Kamer ID:</label>
+                    <input type="number" id="beschikbareKamerIdInput" required />
+                </div>
+                <button type="submit" class="glass-button">Zoeken</button>
+            </form>
+            <pre id="beschikbareKamerByIdResult"></pre>
+        </div>
+    </div>
+</section>
+
+<!-- Beschikbare Kamer Bijwerken (PUT) -->
+<section class="update-section">
+    <div class="form-container update-container">
+        <h2>Update Beschikbare Kamer</h2>
+        <form id="updateBeschikbareKamerForm">
+            <div class="form-group">
+                <input type="number" id="update-bk-id" placeholder="Beschikbare Kamer ID (verplicht)" required />
+            </div>
+            <div class="form-group">
+                <select id="update-beschikbaarheid" required>
+                    <option value="">-- Kies beschikbaarheid --</option>
+                    <option value="beschikbaar">Beschikbaar</option>
+                    <option value="nietbeschikbaar">Niet Beschikbaar</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="number" id="update-kamer-id" placeholder="Kamer ID (verplicht)" required />
+            </div>
+            <button type="submit" class="glass-button">Update Beschikbare Kamer</button>
+        </form>
+        <pre id="updateBeschikbareKamerResult"></pre>
+    </div>
+</section>
+
+<!-- DELETE Beschikbare Kamer SECTION -->
+<section class="delete-bk-section glass-card">
+    <h2>Verwijder Beschikbare Kamer</h2>
+    <form id="deleteBkForm" class="glass-form">
+        <div class="input-group">
+            <label for="bk-id">Beschikbare Kamer ID:</label>
+            <input type="number" id="bk-id" name="bk-id" required placeholder="Bijv. 5" />
+        </div>
+        <button type="submit" class="delete-btn">Verwijder Kamer</button>
+        <p id="deleteBkMessage" class="delete-message"></p>
+    </form>
+</section>
+
+
+
+
 <script src="beschikbarekamers.js"></script>
 </body>
 </html>
