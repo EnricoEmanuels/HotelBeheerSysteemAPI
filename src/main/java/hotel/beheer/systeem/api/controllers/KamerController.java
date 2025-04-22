@@ -19,6 +19,9 @@ import hotel.beheer.systeem.api.services.KamerService;
 // werkt lekker
 // http://localhost:8080/api/kamers/
 
+// ------------------------------------------KamerController is officieel af
+
+
 @Path("/kamers")
 public class KamerController {
     private KamerService kamerService;

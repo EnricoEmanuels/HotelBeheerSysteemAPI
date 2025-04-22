@@ -15,6 +15,10 @@ import jakarta.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+
+// ------------------------------------------KlantController is officieel af
+
+
 @Path("/klanten")
 public class KlantController {
     private KlantService klantService;

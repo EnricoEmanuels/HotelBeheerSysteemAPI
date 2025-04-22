@@ -103,11 +103,25 @@
     </div>
 </section>
 
+<section class="delete-betaalmethode-section glass-card">
+    <h2>Verwijder Betaalmethode</h2>
+    <form id="deleteBetaalmethodeForm" class="glass-form">
+        <div class="input-group">
+            <label for="betaalmethode-id">Betaalmethode ID:</label>
+            <input type="number" id="betaalmethode-idd" name="betaalmethode-id" required placeholder="Bijv. 5" />
+        </div>
+        <button type="submit" class="delete-btn">Verwijder Betaalmethode</button>
+        <p id="betaalmethodeDeleteMessage" class="delete-message"></p>
+    </form>
+</section>
+
+
 
 
 
 
 
 <script src="betaalmethodes.js"></script>
+<script src="delete.js"></script>
 </body>
 </html>

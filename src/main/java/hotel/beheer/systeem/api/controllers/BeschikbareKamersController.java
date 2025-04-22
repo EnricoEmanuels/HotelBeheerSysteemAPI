@@ -2,6 +2,8 @@ package hotel.beheer.systeem.api.controllers;
 
 import hotel.beheer.systeem.api.dto.BeschikbareKamerDTO;
 import hotel.beheer.systeem.api.entities.BeschikbareKamer;
+import hotel.beheer.systeem.api.entities.Kamer;
+import hotel.beheer.systeem.api.entities.Klant;
 import hotel.beheer.systeem.api.mappers.BeschikbareKamerMapper;
 import hotel.beheer.systeem.api.services.BeschikbareKamersService;
 import hotel.beheer.systeem.api.services.KamerService;
@@ -61,7 +63,7 @@ public class BeschikbareKamersController {
         // netjes informatie mappen naar een DTO
         BeschikbareKamerDTO beschikbareKamerDTO = beschikbareKamerMapper.beschikbareKamerDTO(beschikbareKamerOpslaan);
         // retourneren naar de server via de server gaat het naar de frontend
-        return Response.status(Response.Status.CREATED).entity(beschikbareKamerDTO).build(); // je mag CREATED of OK zetten
+        return Response.status(Response.Status.OK).entity(beschikbareKamerDTO).build(); // je mag CREATED of OK zetten
 
     }
 
@@ -80,10 +82,22 @@ public class BeschikbareKamersController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         // id != null informatie updaten via die bestaande entiteit
-//        beschikbareKamer.setId(updatebeschikbareKamer.getId());
-        beschikbareKamer.setId(id);
+        beschikbareKamer.setId(updatebeschikbareKamer.getId());
+//        beschikbareKamer.setId(id);
         beschikbareKamer.setBeschikbareKamerAlternatief(updatebeschikbareKamer.getBeschikbareKamerAlternatief());
-        beschikbareKamer.setKamer(updatebeschikbareKamer.getKamer());
+
+        if (updatebeschikbareKamer.getKamer().getId() != 0) {
+            Kamer kamerById = kamerService.findKamerById(updatebeschikbareKamer.getKamer().getId());
+            beschikbareKamer.setKamer(kamerById);
+        }
+
+//        beschikbareKamer.setKamer(updatebeschikbareKamer.getKamer()); dit hoef niet meer het wordt boven gedaan
+
+//        if ( updateBetaalmethode.getKlant().getId() != 0) {
+//            Klant klant = klantService.findKlantById(updateBetaalmethode.getKlant().getId());
+//            betaalmethodeById.setKlant(klant);
+//
+//        }
 
         // informatie is al opgeslagen dus id die object nu moeten we het soplaan in die database
         beschikbareKamersService.updateBeschikbareKamer(beschikbareKamer);

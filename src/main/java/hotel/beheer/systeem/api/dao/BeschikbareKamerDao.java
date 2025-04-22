@@ -40,6 +40,16 @@ public class BeschikbareKamerDao implements EntityDao<BeschikbareKamer> {
 
         try {
             transaction.begin();
+
+//            // Extra check om klant op te halen:
+//            Klant klant = entityManager.find(Klant.class, betaalmethode.getKlant().getId());
+//            betaalmethode.setKlant(klant);
+//
+//            entityManager.merge(betaalmethode); // Update de klant
+
+            // hier ga je die ID ophalen van kamer die je vindt in beschikbarekamers in die foreign key
+            Kamer kamer = entityManager.find(Kamer.class, beschikbareKamer.getKamer().getId());
+            beschikbareKamer.setKamer(kamer);
             entityManager.persist(beschikbareKamer);
             transaction.commit();
         } catch (Exception e) {

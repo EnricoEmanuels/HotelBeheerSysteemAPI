@@ -1,10 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Beschikbare Kamers | HotelLux</title>
+    <link rel="stylesheet" href="beschikbarekamers.css" />
 </head>
 <body>
 
+<div class="bubbles">
+    <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<section class="form-container">
+    <h2>Voeg Beschikbare Kamer toe</h2>
+    <form id="beschikbareKamerForm" class="glass-form">
+        <div class="form-group">
+            <label for="beschikbarekameralternatief">Status Beschikbaarheid:</label>
+            <select id="beschikbarekameralternatief" name="beschikbarekameralternatief">
+                <option value="">-- Selecteer --</option>
+                <option value="beschikbaar">Beschikbaar</option>
+                <option value="nietbeschikbaar">Niet Beschikbaar</option>
+            </select>
+            <span class="validation-message" id="beschikbarekameralternatief-validation">Selecteer een status.</span>
+        </div>
+
+        <div class="form-group">
+            <label for="kamer_id">Kamer ID:</label>
+            <input type="number" id="kamer_id" name="kamer_id" placeholder="Bijv. 5" />
+            <span class="validation-message" id="kamer_id-validation">Kamer ID is verplicht.</span>
+        </div>
+
+        <button type="submit">Toevoegen</button>
+    </form>
+    <pre id="beschikbareKamerResponse"></pre>
+</section>
+
+<script src="beschikbarekamers.js"></script>
 </body>
 </html>

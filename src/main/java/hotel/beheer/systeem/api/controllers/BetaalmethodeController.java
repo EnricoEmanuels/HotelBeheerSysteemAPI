@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
-// ------------------------------------------NOG niet uitgeprobeert via die frontend
+// ------------------------------------------betaalmethodeController is officieel af
 
 @Path("/betaalmethodes")
 public class BetaalmethodeController {
