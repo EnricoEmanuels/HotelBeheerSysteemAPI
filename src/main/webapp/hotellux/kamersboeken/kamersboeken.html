@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>KamersBoeken | HotelLux</title>
+    <link rel="stylesheet" href="kamersboeken.css" />
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Kamer Boeken</h2>
+        <form id="boekForm">
+            <label>Startdatum:</label>
+            <input type="date" id="startdatum" required />
+
+            <label>Einddatum:</label>
+            <input type="date" id="einddatum" required />
+
+            <label>Klant ID:</label>
+            <input type="number" id="klant_id" required />
+            <div class="error" id="klantError"></div>
+
+            <label>Beschikbare Kamer ID:</label>
+            <input type="number" id="beschikbareKamer_id" required />
+            <div class="error" id="kamerError"></div>
+
+            <label>Betaalmethode ID:</label>
+            <input type="number" id="betaalmethode_id" required />
+            <div class="error" id="betaalError"></div>
+
+            <button type="submit">Boek Kamer</button>
+        </form>
+    </div>
+
+<script src="kamersboeken.js"></script>
+</body>
+</html>

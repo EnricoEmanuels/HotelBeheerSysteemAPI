@@ -214,6 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // });
     //
 
+    // GET 1 ID
     document.getElementById('getBetaalmethodeForm').addEventListener('submit', async (event) => {
         event.preventDefault();
 

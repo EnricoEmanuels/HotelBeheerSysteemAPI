@@ -39,6 +39,18 @@ public class KamersBoekenDao implements EntityDao<KamersBoeken> {
 
         try {
             transaction.begin();
+
+
+//            Klant klantID = entityManager.find(Klant.class , kamersBoeken.getKlant().getId());
+//            kamersBoeken.setKlant(klantID);
+//
+//            BeschikbareKamer beschikbareKamerID = entityManager.find(BeschikbareKamer.class, kamersBoeken.getBeschikbareKamer().getId());
+//            kamersBoeken.setBeschikbareKamer(beschikbareKamerID);
+//
+//            Betaalmethode betaalmethodeID = entityManager.find(Betaalmethode.class , kamersBoeken.getBetaalmethodes().getDatum());
+//            kamersBoeken.setBetaalmethodes(betaalmethodeID);
+
+
             entityManager.persist(kamersBoeken);
             transaction.commit();
         } catch (Exception e) {

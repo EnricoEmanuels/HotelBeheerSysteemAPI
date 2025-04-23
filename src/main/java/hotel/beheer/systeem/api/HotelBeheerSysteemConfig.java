@@ -1,22 +1,10 @@
 package hotel.beheer.systeem.api;
 
 import hotel.beheer.systeem.api.config.JPAConfig;
-import hotel.beheer.systeem.api.controllers.BeschikbareKamersController;
-import hotel.beheer.systeem.api.controllers.BetaalmethodeController;
-import hotel.beheer.systeem.api.controllers.KamerController;
-import hotel.beheer.systeem.api.controllers.KlantController;
-import hotel.beheer.systeem.api.dao.BeschikbareKamerDao;
-import hotel.beheer.systeem.api.dao.BetaalmethodeDao;
-import hotel.beheer.systeem.api.dao.KamerDao;
-import hotel.beheer.systeem.api.dao.KlantDao;
-import hotel.beheer.systeem.api.mappers.BeschikbareKamerMapper;
-import hotel.beheer.systeem.api.mappers.BetaalmethodeMapper;
-import hotel.beheer.systeem.api.mappers.KamerMapper;
-import hotel.beheer.systeem.api.mappers.KlantMapper;
-import hotel.beheer.systeem.api.services.BeschikbareKamersService;
-import hotel.beheer.systeem.api.services.BetaalmethodeService;
-import hotel.beheer.systeem.api.services.KamerService;
-import hotel.beheer.systeem.api.services.KlantService;
+import hotel.beheer.systeem.api.controllers.*;
+import hotel.beheer.systeem.api.dao.*;
+import hotel.beheer.systeem.api.mappers.*;
+import hotel.beheer.systeem.api.services.*;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -76,6 +64,13 @@ public class HotelBeheerSysteemConfig
         BeschikbareKamerMapper beschikbareKamerMapper = new BeschikbareKamerMapper();
 
 
+        // kamersboeken
+        KamersBoekenDao kamersBoekenDao = new KamersBoekenDao(entityManager);
+
+        KamersBoekenMapper kamersBoekenMapper = new KamersBoekenMapper();
+
+        KamersBoekenService kamersBoekenService = new KamersBoekenService(kamersBoekenDao);
+
 
 
         KlantDao klantDao = new KlantDao(entityManager);
@@ -86,6 +81,10 @@ public class HotelBeheerSysteemConfig
         BetaalmethodeController betaalmethodeController = new BetaalmethodeController(betaalmethodeService, betaalmethodeMapper, klantService);
         // betaalmethode dwingen om constructor injectie toe te passen
         config.register(betaalmethodeController);
+
+        // kamersboeken controller
+        KamersBoekenController kamersBoekenController = new KamersBoekenController(kamersBoekenService, kamersBoekenMapper, klantService, beschikbareKamersService, betaalmethodeService);
+        config.register(kamersBoekenController); // object dwingen om constructor injectie toe te passenn
 
 
         KlantController klantController = new KlantController(klantService, klantMapper, betaalmethodeService);
