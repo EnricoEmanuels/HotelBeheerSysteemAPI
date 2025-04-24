@@ -2,9 +2,12 @@ package hotel.beheer.systeem.api.entities;
 
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 @Entity
 @Table(name = "beschikbarekamers" , schema = "hotelbeheersysteemapi")
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BeschikbareKamer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +23,7 @@ public class BeschikbareKamer {
 //    @Column(name = "beschikbaar", nullable = false, length = 255)
 //    private String beschikbaar;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "kamer_id", referencedColumnName = "id")
     private Kamer kamer;
 

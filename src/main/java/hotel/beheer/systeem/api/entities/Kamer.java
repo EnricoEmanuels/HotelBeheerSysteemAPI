@@ -1,11 +1,13 @@
 package hotel.beheer.systeem.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 
 
 @Entity
 @Table(name = "kamer" , schema = "hotelbeheersysteemapi")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class Kamer {
     @Id

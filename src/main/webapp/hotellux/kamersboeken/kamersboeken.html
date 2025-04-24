@@ -8,31 +8,110 @@
 </head>
 <body>
 
-    <div class="form-container">
-        <h2>Kamer Boeken</h2>
-        <form id="boekForm">
-            <label>Startdatum:</label>
-            <input type="date" id="startdatum" required />
+    <section>
+        <div class="form-container">
+            <h2>Kamer Boeken</h2>
+            <form id="boekForm">
+                <label>Startdatum:</label>
+                <input type="date" id="startdatum" required />
 
-            <label>Einddatum:</label>
-            <input type="date" id="einddatum" required />
+                <label>Einddatum:</label>
+                <input type="date" id="einddatum" required />
 
-            <label>Klant ID:</label>
-            <input type="number" id="klant_id" required />
-            <div class="error" id="klantError"></div>
+                <label>Klant ID:</label>
+                <input type="number" id="klant_id" required />
+                <div class="error" id="klantError"></div>
 
-            <label>Beschikbare Kamer ID:</label>
-            <input type="number" id="beschikbareKamer_id" required />
-            <div class="error" id="kamerError"></div>
+                <label>Beschikbare Kamer ID:</label>
+                <input type="number" id="beschikbareKamer_id" required />
+                <div class="error" id="kamerError"></div>
 
-            <label>Betaalmethode ID:</label>
-            <input type="number" id="betaalmethode_id" required />
-            <div class="error" id="betaalError"></div>
+                <label>Betaalmethode ID:</label>
+                <input type="number" id="betaalmethode_id" required />
+                <div class="error" id="betaalError"></div>
 
-            <button type="submit">Boek Kamer</button>
+                <button type="submit">Boek Kamer</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- GET ALLE KAMERSBOEKINGEN - GLASSY POPUP -->
+    <section >
+        <button id="fetchBoekingenButton" class="glass-button">Toon Alle Kamersboekingen</button>
+
+        <div id="boekingenPopup" class="glass-popup hidden">
+            <div class="popup-content">
+                <span id="closeBoekingenPopup" class="close-button">&times;</span>
+                <h2>Alle Kamersboekingen</h2>
+                <pre id="boekingenResultaat"></pre>
+            </div>
+        </div>
+    </section>
+
+<!--    dit is die GET BY ID-->
+    <section>
+        <button id="getBoekingByIdBtn" class="glass-button">Zoek Kamerboeking op ID</button>
+
+        <div id="boekingByIdPopup" class="glass-popup hidden">
+            <div class="popup-content">
+                <span class="close-button" id="closeBoekingPopup">&times;</span>
+                <h2>Kamerboeking zoeken</h2>
+                <form id="boekingByIdForm">
+                    <label for="boekingIdInput">Boeking ID:</label>
+                    <input type="number" id="boekingIdInput" required>
+                    <button type="submit" class="glass-button">Zoeken</button>
+                </form>
+                <pre id="boekingByIdResult"></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- KamersBoeken Bijwerken -->
+    <section class="update-section">
+        <div class="form-container update-container">
+            <h2>Update KamersBoeken</h2>
+            <form id="updateBoekingForm">
+                <div class="form-group">
+                    <input type="number" id="boeking_idd" placeholder="Boeking ID (verplicht)" required />
+                </div>
+                <div class="form-group">
+                    <input type="date" id="startdatumm" placeholder="Startdatum" required />
+                </div>
+                <div class="form-group">
+                    <input type="date" id="einddatumm" placeholder="Einddatum" required />
+                </div>
+                <div class="form-group">
+                    <input type="number" id="klant_idd" placeholder="Klant ID" required />
+                    <span id="klantErrorr" class="error-msg"></span>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="beschikbareKamer_idd" placeholder="Beschikbare Kamer ID" required />
+                    <span id="kamerErrorr" class="error-msg"></span>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="betaalmethode_idd" placeholder="Betaalmethode ID" required />
+                    <span id="betaalErrorr" class="error-msg"></span>
+                </div>
+                <button type="submit">Update Boeking</button>
+            </form>
+            <pre id="updateBoekingResponse"></pre>
+        </div>
+    </section>
+
+    <!-- DELETE KAMERSBOEKEN SECTION -->
+    <section class="delete-boeking-section glass-card">
+        <h2>Verwijder KamersBoeking</h2>
+        <form id="deleteBoekingForm" class="glass-form">
+            <div class="input-group">
+                <label for="boeking-id">Boeking ID:</label>
+                <input type="number" id="boeking-id" required placeholder="Bijv. 5" />
+            </div>
+            <button type="submit" class="delete-btn">Verwijder Boeking</button>
+            <p id="boekingDeleteMessage" class="delete-message"></p>
         </form>
-    </div>
+    </section>
 
-<script src="kamersboeken.js"></script>
+
+    <script src="kamersboeken.js"></script>
 </body>
 </html>

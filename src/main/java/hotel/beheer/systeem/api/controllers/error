@@ -20,3 +20,208 @@ Caused by: java.lang.NoSuchMethodException: Could not find a suitable constructo
         KamerController kamerController = new KamerController(kamerService);
         // dwingen om constructor injectie toe te passen
         config.register(kamerController);
+
+
+als ik een jar maakt en ik op die server gaat en op die getall gaat van betaalmethodes krijg ik teveel duplicaten
+
+vb [{"id":1,"methode":"creditcard","datum":1745107200000,"klant":{"id":4,"voornaam":"Hanna","achternaam":"Christa","telefoon":"689684854","email":"hanna@gmail.com","balans":4354.0,"betaalmethode":null},"kamersBoeken":[{"id":2,"startdatum":1745625600000,"einddatum":1748217600000,"klant":{"id":3,"voornaam":"Justin","achternaam":"Emanuels","telefoon":"75473983","email":"justinpursie@gmail.com","balans":1000.0,"betaalmethode":null},"beschikbareKamer":{"id":2,"beschikbareKamerAlternatief":"beschikbaar","kamer":{"id":4,"kamertype":"goedkoop","aantalbedden":1,"prijsPerMaand":300.0}},"betaalmethodes":{"id":1,"methode":"creditcard","datum":1745107200000,"klant":{"id":4,"voornaam":"Hanna","achternaam":"Christa","telefoon":"689684854","email":"hanna@gmail.com","balans":4354.0,"betaalmethode":null},"kamersBoeken":[{"id":2,"startdatum":1745625600000,"einddatum":1748217600000,"klant":{"id":3,"voornaam":"Justin","achternaam":"Emanuels","telefoon":"75473983","email":"justinpursie@gmail.com","balans":1000.0,"betaalmethode":null},"beschikbareKamer":{"id":2,"beschikbareKamerAlternatief":"beschikbaar","kamer":{"id":4,"kamertype":"goedkoop","aantalbedden":1,"prijsPerMaand":300.0}},"betaalmethodes":{"id":1,"methode":"creditcard","datum":1745107200000,"klant":{"id":4,"voornaam":"Hanna","achternaam":"Christa","telefoon":"689684854","email":"hanna@gmail.com","balans":4354.0,"betaalmethode":null},"kamersBoeken":[{"id":2,"startdatum":1745625600000,"einddatum":1748217600000,"klant":{"id":3,"voornaam":"Justin","achternaam":"Emanuels","telefoon":"75473983","email":"justinpursie@gmail.com","balans":1000.0,"betaalmethode":null},"beschikbareKamer":{"id":2,"beschikbareKamerAlternatief":"beschikbaar","kamer":{"id":4,"kamertype":"goedkoop","aantalbedden":1,"prijsPerMaand":300.0}},"betaalmethodes":{"id":1,"methode":"creditcard","datum":1745107200000,"klant":
+
+zelfde als ik druk op kamersboeken
+
+[{"id":1,"startdatum":1745366400000,"einddatum":1747958400000,"klant":{"id":1,"voornaam":"Enrico","achternaam":"Emanuels","telefoon":"8207594","email":"enman501926ec@gmail.com","balans":2000.0,"betaalmethode":null},"beschikbareKamer":{"id":1,"beschikbareKamerAlternatief":"beschikbaar","kamer":{"id":1,"kamertype":"goedkoop","aantalbedden":1,"prijsPerMaand":300.0}},"betaalmethodes":{"id":1,"methode":"creditcard","datum":1745107200000,"klant":{"id":4,"voornaam":"Hanna","achternaam":"Christa","telefoon":"689684854","email":"hanna@gmail.com","balans":4354.0,"betaalmethode":null},"kamersBoeken":[{"id":2,"startdatum":1745625600000,"einddatum":1748217600000,"klant":{"id":3,"voornaam":"Justin","achternaam":"Emanuels","telefoon":"75473983","email":"justinpursie@gmail.com","balans":1000.0,"betaalmethode":null},"beschikbareKamer":{"id":2,"beschikbareKamerAlternatief":"beschikbaar","kamer":{"id":4,"kamertype":"goedkoop","aantalbedden":1,"prijsPerMaand":300.0}},"betaalmethodes":{"id":1,"methode":"creditcard","datum":1745107200000,"klant":{"id":4,"voornaam":"Hanna","achternaam":"Christa","telefoon":"689684854","email":"hanna@
+
+--------------------------
+
+---probleem was ergens in die one to many
+
+ik heb die IGnoreJason gezet bij die @OneToMany betaalmethode en die kamersboeken
+die @OneToMany was tussen deze twee en dan heb ik bij beide gezet JsonIgnore en dan
+werkt het perfect
+
+
+Bro, wat jij beschrijft is classic Hibernate infinite recursion—je zit midden in een bidirectionele relatie loop, en Jackson (de JSON-serializer) probeert je volledige objectgraf eindeloos te serializen. Het is dus niet dat er echt duplicaten zijn in je database, maar dat Hibernate via EAGER of LAZY loading een cirkel blijft volgen bij het maken van je JSON-respons.
+
+Wat gebeurt er precies?
+Je hebt waarschijnlijk iets als dit:
+
+java
+Copy
+Edit
+@Entity
+public class KamersBoeken {
+    @ManyToOne
+    private Betaalmethode betaalmethode;
+}
+
+@Entity
+public class Betaalmethode {
+    @OneToMany(mappedBy = "betaalmethode")
+    private Set<KamersBoeken> kamersBoeken;
+}
+Als Jackson nu KamersBoeken serializeert, ziet hij dat daar een Betaalmethode in zit. Dan gaat hij die Betaalmethode serializen, maar die heeft ook weer een Set<KamersBoeken>... en die bevatten weer Betaalmethode, enzovoort...
+
+Hoe los je dit op?
+Er zijn twee standaard manieren:
+
+1. Gebruik @JsonIgnore om de lus te breken
+Bijvoorbeeld in Betaalmethode.java:
+
+java
+Copy
+Edit
+@OneToMany(mappedBy = "betaalmethode")
+@JsonIgnore
+private Set<KamersBoeken> kamersBoeken;
+Dan zal Jackson stoppen met serializen bij dat punt, en je krijgt geen loops meer.
+
+2. Of gebruik @JsonManagedReference en @JsonBackReference
+java
+Copy
+Edit
+@Entity
+public class KamersBoeken {
+    @ManyToOne
+    @JsonManagedReference
+    private Betaalmethode betaalmethode;
+}
+
+@Entity
+public class Betaalmethode {
+    @OneToMany(mappedBy = "betaalmethode")
+    @JsonBackReference
+    private Set<KamersBoeken> kamersBoeken;
+}
+@JsonManagedReference = forward side, @JsonBackReference = inverse side.
+
+Dit voorkomt eindeloze loops, maar laat je wel toe om eenmalig de relatie te serializen.
+
+Pro tip:
+Gebruik LAZY bij @OneToMany, en alleen EAGER als je echt zeker weet dat je die data direct nodig hebt. LAZY is beter voor performance en voorkomt onnodige JOINs.
+
+----------------
+
+De foutmelding die je krijgt:
+
+kotlin
+Copy
+Edit
+No serializer found for class org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor...
+komt omdat Jackson (de JSON-serializer) niet weet hoe hij met lazy-loaded Hibernate proxies moet omgaan. Hibernate maakt een proxy object (bijvoorbeeld BeschikbareKamer$HibernateProxy), en Jackson probeert dat direct te serializen, wat fout gaat.
+
+Oplossingen
+Er zijn drie goede manieren om dit probleem op te lossen:
+
+1. Voeg @JsonIgnoreProperties toe op je entiteiten
+Dit vertelt Jackson om de hibernateLazyInitializer en handler properties te negeren tijdens serialisatie:
+
+Bijvoorbeeld:
+
+java
+Copy
+Edit
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@Entity
+@Table(name = "kamersboeken", schema = "hotelbeheersysteemapi")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class KamersBoeken {
+    ...
+}
+Doe dit ook bij BeschikbareKamer en Betaalmethode:
+
+java
+Copy
+Edit
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class BeschikbareKamer {
+    ...
+}
+java
+Copy
+Edit
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Betaalmethode {
+    ...
+}
+2. Zet FetchType.LAZY om naar FetchType.EAGER (alleen als performance niet belangrijk is)
+Bijvoorbeeld:
+
+java
+Copy
+Edit
+@ManyToOne(fetch = FetchType.EAGER)
+private BeschikbareKamer beschikbareKamer;
+Nadeel: dit kan veel data ophalen en je performance beïnvloeden.
+
+3. Gebruik DTO's + Mapper
+Je maakt een aparte klasse KamersBoekenDto zonder Hibernate-relaties, en mapt daar je response naartoe:
+
+java
+Copy
+Edit
+public class KamersBoekenDto {
+    private int id;
+    private Date startdatum;
+    private Date einddatum;
+    private int klantId;
+    private int beschikbareKamerId;
+    private int betaalmethodeId;
+}
+En dan in je controller:
+
+java
+Copy
+Edit
+KamersBoeken boeken = kamersBoekenService.findKamersBoekenById(id);
+KamersBoekenDto dto = new KamersBoekenDto();
+dto.setId(boeken.getId());
+dto.setStartdatum(boeken.getStartdatum());
+// enz...
+
+return Response.ok(dto).build();
+Aanbevolen voor jouw situatie:
+Gebruik optie 1: @JsonIgnoreProperties, want dat is snel en makkelijk, zonder je architectuur om te gooien.
+
+
+----------------------------
+
+Wat is het probleem?
+Je probeert een KamersBoeken-entiteit te verwijderen, maar Hibernate/MySQL probeert daarna (mogelijk door cascade instellingen) ook gerelateerde entiteiten zoals Klant of Betaalmethode te verwijderen. Dat mislukt omdat er nog foreign key constraints zijn in andere tabellen die naar deze verwijzen.
+
+In het bijzonder:
+
+Cannot delete or update a parent row: a foreign key constraint fails (betaalmethode.Klant_id -> klant.id)
+
+Dit betekent: MySQL voorkomt dat een Klant wordt verwijderd zolang er nog Betaalmethode-records bestaan die naar die klant verwijzen. Dit gebeurt dus waarschijnlijk omdat je @OneToOne of @ManyToOne met CascadeType.REMOVE hebt gebruikt.
+
+Oplossing: verwijder CascadeType.REMOVE waar dat niet nodig is
+In jouw KamersBoeken-klasse heb je dit:
+
+java
+Copy
+Edit
+@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+@JoinColumn(name = "klant_id", referencedColumnName = "id")
+private Klant klant;
+Probleem: deze cascade zorgt ervoor dat wanneer je een KamersBoeken verwijdert, Hibernate ook probeert de gekoppelde Klant te verwijderen — maar dat mag niet, want die Klant heeft nog Betaalmethode-records in de database.
+
+Wat moet je doen?
+1. Verwijder cascade = CascadeType.REMOVE bij Klant, BeschikbareKamer, Betaalmethode in KamersBoeken
+
+Pas je entiteit zo aan:
+
+java
+Copy
+Edit
+@OneToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "klant_id", referencedColumnName = "id")
+private Klant klant;
+
+@ManyToOne(optional = false, fetch = FetchType.LAZY)
+@JoinColumn(name = "beschikbarekamer_id", nullable = false , referencedColumnName = "id")
+private BeschikbareKamer beschikbareKamer;
+
+@ManyToOne(optional = false , fetch = FetchType.LAZY)
+@JoinColumn(name = "betaalmethode_id", nullable = false)
+private Betaalmethode betaalmethodes;
+Laat de cascade dus weg.

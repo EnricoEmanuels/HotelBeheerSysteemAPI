@@ -1,11 +1,13 @@
 package hotel.beheer.systeem.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.Date;
 
 
 @Entity
 @Table(name = "betaalmethodecreditcard" , schema = "hotelbeheersysteemapi")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class BetaalmethodeCreditcard {
     @Id

@@ -1,4 +1,11 @@
 package hotel.beheer.systeem.api.entities;
+// om die jason duplicaten te vermijden in betaalmethodes seerver
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+// om die jason duplicaten te vermijden in die server
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 import java.util.Date;
@@ -10,6 +17,8 @@ import java.util.Set;
 @Table(name = "betaalmethode" , schema = "hotelbeheersysteemapi")
 
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class Betaalmethode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +33,7 @@ public class Betaalmethode {
     private Date datum;
 
 
-    @ManyToOne( optional = false)
+    @ManyToOne( optional = false, fetch = FetchType.LAZY)
 //    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "klant_id", nullable = false)
     private Klant klant;
@@ -37,7 +46,9 @@ public class Betaalmethode {
 //    @OneToMany(mappedBy = "klant", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private Set<Bestelling> bestellingen = new HashSet<>();
 
-    @OneToMany(mappedBy = "betaalmethodes", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "betaalmethodes", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    @JsonManagedReference
+    @JsonIgnore
     private Set<KamersBoeken> kamersBoeken = new HashSet<>();
 
     public enum MethodeType {

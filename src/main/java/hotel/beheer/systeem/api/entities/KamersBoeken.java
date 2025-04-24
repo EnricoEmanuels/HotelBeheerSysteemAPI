@@ -1,6 +1,11 @@
 package hotel.beheer.systeem.api.entities;
-
+// om die jason duplicaten te vermijden in die server
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 import java.util.Date;
@@ -8,6 +13,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "kamersboeken" , schema = "hotelbeheersysteemapi")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class KamersBoeken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +33,7 @@ public class KamersBoeken {
 //    @Column(name = "betaald", nullable = false, length = 10)
 //    private String betaald;
 
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "klant_id", referencedColumnName = "id")
 //    @Column(name = "klant_id", nullable = false)
     private Klant klant;
@@ -41,7 +48,10 @@ public class KamersBoeken {
 //    @JoinColumn(name = "betaalmethode_id", referencedColumnName = "id")
 
 
-    @ManyToOne(optional = false , fetch = FetchType.EAGER)
+    @ManyToOne(optional = false , fetch = FetchType.LAZY)
+//    @JsonManagedReference
+//    @JsonIgnore
+
     @JoinColumn(name = "betaalmethode_id", nullable = false)
     private Betaalmethode betaalmethodes;
 
