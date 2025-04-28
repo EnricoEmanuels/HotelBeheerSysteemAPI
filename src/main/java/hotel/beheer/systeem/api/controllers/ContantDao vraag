@@ -1,0 +1,59 @@
+Topuitleg van je kant — ik snap precies wat je bedoelt, en ik ga je nu heel precies, stap voor stap antwoord geven op jouw vraag.
+
+Samenvatting van jouw situatie:
+
+betaalmethode is een basisentiteit.
+
+betaalmethodecontant verwijst naar betaalmethode via de id (1-op-1-relatie, de id is tegelijk de foreign key én primary key van betaalmethodecontant).
+
+In Java betekent dat: in jouw BetaalmethodeContant-klasse heb je een attribuut Betaalmethode betaalmethode, die door middel van bijvoorbeeld een @OneToOne of @ManyToOne mapping is gelinkt aan de Betaalmethode.
+
+Jouw concrete vraag is:
+
+Als ik betaalmethodeContant.getBetaalmethode().getId() doe, kan ik dan alleen de id krijgen omdat die gekoppeld is? En als ik betaalmethodeContant.getBetaalmethode().getMethode() of getDatum() wil krijgen, kan dat dan ook? Of gaat dat mis omdat alleen de ID gekoppeld is?
+
+Antwoord:
+JA, je kan ook gewoon methode, datum, etc. ophalen via getBetaalmethode().getMethode() en getBetaalmethode().getDatum(). Niet alleen de ID!
+
+Uitleg waarom:
+
+De foreign key is alleen voor de database.
+
+In Java (JPA/Hibernate) betekent die foreign key dat je een volledige verwijzing naar het object (Betaalmethode) hebt.
+
+Dus in Java, zodra betaalmethodeContant.getBetaalmethode() goed geladen is (bijvoorbeeld door find() of persist() of lazy loading), heb je toegang tot ALLE properties van Betaalmethode: id, methode, datum, klant, etc.
+
+Je kan dus gewoon doen:
+
+java
+Copy
+Edit
+BetaalmethodeContant betaalmethodeContant = ...; // bijvoorbeeld opgehaald met EntityManager.find
+betaalmethodeContant.getBetaalmethode().getId();       // werkt
+betaalmethodeContant.getBetaalmethode().getMethode();   // werkt
+betaalmethodeContant.getBetaalmethode().getDatum();     // werkt
+betaalmethodeContant.getBetaalmethode().getKlant();     // werkt
+Niet alleen die kolom die in de foreign key staat — je krijgt het hele object.
+
+Heel belangrijk
+Maar! Let op één ding:
+
+Als betaalmethode nog niet geladen is (bijvoorbeeld omdat je lazy loading gebruikt), en je probeert direct getBetaalmethode().getMethode() te doen buiten een open EntityManager-session, dan kan je een LazyInitializationException krijgen.
+
+In jouw voorbeeld (entityManager.find + daarna direct setBetaalmethode + persist) is dat niet het probleem, want je bent nog in een actieve transactie en EntityManager is open.
+
+Voorbeeld in jouw context:
+java
+Copy
+Edit
+// Stel je haalt BetaalmethodeContant binnen
+BetaalmethodeContant contant = entityManager.find(BetaalmethodeContant.class, 5);
+
+// Dan kan je dit allemaal doen:
+System.out.println(contant.getValuta());                        // valuta van contant
+System.out.println(contant.getBetaalmethode().getId());         // id van betaalmethode
+System.out.println(contant.getBetaalmethode().getMethode());    // crypto/creditcard/contant
+System.out.println(contant.getBetaalmethode().getDatum());      // datum
+System.out.println(contant.getBetaalmethode().getKlant());      // klant object
+TL;DR:
+Niet alleen ID. Zodra je getBetaalmethode() doet, krijg je het volledige Betaalmethode object en je kan alle getters gebruiken (getId(), getMethode(), getDatum(), getKlant(), etc.).

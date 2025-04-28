@@ -10,6 +10,53 @@ import java.util.List;
 public class BetaalmethodeContantDao implements EntityDao<BetaalmethodeContant> {
     private EntityManager entityManager;
 
+    @Override
+    public void save( BetaalmethodeContant betaalmethodeContant) {
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+            // ik ben in die betaalmethodeContant als ik die getbetaalmethode doe ben ik nogsteeds in die
+            // betaalmethodeContant maar in combinatie met die getid kan ik alleen die ID halen avn die
+            // foreign key die ik heb gekoppeld met betaalmethode ID maar dat is null
+            Betaalmethode betaalmethodeId = entityManager.find(Betaalmethode.class, betaalmethodeContant.getId() );
+            if (betaalmethodeId == null) {
+                throw new IllegalArgumentException("Betaalmethode met ID " + betaalmethodeContant.getId() + " bestaat niet.");
+            }
+            betaalmethodeContant.setBetaalmethode(betaalmethodeId);
+
+            entityManager.persist(betaalmethodeContant);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace(); // deze code gaat je jouw error wijzen als het in die catch komt
+        }
+        System.out.println("Succesvol ingevoegd");
+    }
+
+
+    //    @Override
+    public void saveMetBetaalmethodeId(Betaalmethode betaalmethodeId, BetaalmethodeContant betaalmethodeContant) {
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+            // ik ben in die betaalmethodeContant als ik die getbetaalmethode doe ben ik nogsteeds in die
+            // betaalmethodeContant maar in combinatie met die getid kan ik alleen die ID halen avn die
+            // foreign key die ik heb gekoppeld met betaalmethode ID maar dat is null
+            Betaalmethode betaalmethode = entityManager.find(Betaalmethode.class, betaalmethodeId.getId() );
+            betaalmethodeContant.setBetaalmethode(betaalmethode);
+//            betaalmethodeContant.setId(betaalmethodeId);
+
+            entityManager.persist(betaalmethodeContant);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace(); // deze code gaat je jouw error wijzen als het in die catch komt
+        }
+        System.out.println("Succesvol ingevoegd");
+    }
+
     public BetaalmethodeContantDao(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
@@ -31,20 +78,8 @@ public class BetaalmethodeContantDao implements EntityDao<BetaalmethodeContant> 
     }
 
 
-    @Override
-    public void save(BetaalmethodeContant betaalmethodeContant) {
-        EntityTransaction transaction = entityManager.getTransaction();
 
-        try {
-            transaction.begin();
-            entityManager.persist(betaalmethodeContant);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-            e.printStackTrace(); // deze code gaat je jouw error wijzen als het in die catch komt
-        }
-        System.out.println("Succesvol ingevoegd");
-    }
+
 
     @Override
     public BetaalmethodeContant findById(Integer id) {

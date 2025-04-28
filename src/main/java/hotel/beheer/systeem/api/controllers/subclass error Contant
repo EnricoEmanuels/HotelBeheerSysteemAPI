@@ -1,0 +1,293 @@
+Wat is jouw echte probleem?
+
+Je stuurt id en valuta naar jouw backend.
+Maar: de backend verwacht een gekoppelde Betaalmethode entiteit, en die staat nu op null.
+
+Waarom gebeurt dat?
+
+Omdat in jouw BetaalmethodeContant entity dit staat:
+
+java
+Copy
+Edit
+@OneToOne
+@MapsId
+@JoinColumn(name = "id")
+private Betaalmethode betaalmethode;
+Dit zegt: “de ID van BetaalmethodeContant is de ID van een bestaande Betaalmethode”.
+
+Maar: jij vult alleen een los id-getal en valuta in. De backend probeert dan de gekoppelde Betaalmethode te vinden — maar die is null, en Hibernate kan niet verder:
+→ Error: "attempted to assign id from null one-to-one property."
+
+Oplossing
+Je moet in de backend, vóórdat je persist doet, handmatig die Betaalmethode ophalen en koppelen.
+
+Dat stukje code had je bijna al, je had het zelfs al in comments gezet!
+
+java
+Copy
+Edit
+Betaalmethode betaalmethodeId = entityManager.find(Betaalmethode.class, betaalmethodeContant.getId());
+betaalmethodeContant.setBetaalmethode(betaalmethodeId);
+Je moet dit UNCOMMENTEN en ACTIEF MAKEN in je save-functie!
+
+Concreet
+In je BetaalmethodeContantDao.java, verander je je save methode van:
+
+java
+Copy
+Edit
+public void save(BetaalmethodeContant betaalmethodeContant) {
+    EntityTransaction transaction = entityManager.getTransaction();
+
+    try {
+        transaction.begin();
+        entityManager.persist(betaalmethodeContant);
+        transaction.commit();
+    } catch (Exception e) {
+        transaction.rollback();
+        e.printStackTrace();
+    }
+}
+naar:
+
+java
+Copy
+Edit
+public void save(BetaalmethodeContant betaalmethodeContant) {
+    EntityTransaction transaction = entityManager.getTransaction();
+
+    try {
+        transaction.begin();
+
+        // Betaalmethode ophalen en koppelen!
+        Betaalmethode betaalmethodeId = entityManager.find(Betaalmethode.class, betaalmethodeContant.getId());
+        if (betaalmethodeId == null) {
+            throw new IllegalArgumentException("Betaalmethode met ID " + betaalmethodeContant.getId() + " bestaat niet.");
+        }
+        betaalmethodeContant.setBetaalmethode(betaalmethodeId);
+
+        entityManager.persist(betaalmethodeContant);
+        transaction.commit();
+    } catch (Exception e) {
+        transaction.rollback();
+        e.printStackTrace();
+    }
+}
+Waarom werkt dit?
+Hibernate verwacht dat betaalmethode (object) ingevuld is voordat hij de id kan gebruiken.
+
+Jij vult nu alleen een ID, dus moet je zelf even de echte Betaalmethode ophalen uit de database.
+
+Daarna kan Hibernate normaal verder en de juiste foreign key aanmaken.
+
+--------------------------
+
+
+Ik snap je hele uitleg en je denkwijze — en ik vind het echt sterk dat je niet gewoon zegt "het werkt dus laat maar", maar echt begrijpen wilt wat je aan het doen bent. Dat is precies hoe je echt een goede developer wordt.
+
+Ik ga je stuk voor stuk volgen en rustig uitleggen:
+
+1. Waarom hoefde je niet twee dingen (apart ID en apart object) te sturen bij de POST?
+Bij een POST (voor nieuwe aanmaak) laat je normaal gesproken de database een ID genereren (auto_increment).
+Dus bij een POST stuur je alleen de velden die je nodig hebt om een nieuw object te maken. Geen ID nodig, want die wordt automatisch gezet.
+
+In jouw geval:
+
+Je stuurt een valuta (bijv. hoeveel euro).
+
+En een betaalmethode ID die al bestaat (omdat je verwijst naar een bestaande betaalmethode).
+
+Dus:
+
+Je hoeft niet apart een int-ID te sturen, want die ID hoort bij een bestaande betaalmethode, en dat kan je via het object (Betaalmethode) laden.
+
+Daarom heb je maar één BetaalmethodeContant nodig met:
+
+een valuta
+
+een koppeling naar een bestaande Betaalmethode
+
+2. Wanneer zou je wél splitsen tussen ID en object?
+Bijvoorbeeld in een PUT (update) is dat wél anders.
+
+In een PUT moet je:
+
+Weten wélk object je gaat aanpassen (id van het object).
+
+En je moet nieuwe data meesturen (bijvoorbeeld nieuwe valuta).
+
+Dus in een PUT zeg je:
+→ Deze bestaande betaalmethode (id 5) moet ik updaten met deze nieuwe data.
+
+Daarom splits je het bij een PUT:
+
+java
+Copy
+Edit
+public Response update(@PathParam("id") int id, BetaalmethodeContant updatedBetaalmethodeContant)
+Dus:
+
+De ID in de URL (/update/5)
+
+En de nieuwe data in de body.
+
+Bij POST maak je iets nieuws aan → geen splitsing nodig.
+
+3. Waarom moest je handmatig die EntityManager.find() doen?
+In je DAO (bij de save) had je een probleem: Hibernate kon niet automatisch snappen dat die Betaalmethode waarnaar je verwijst al bestond.
+
+Want jij stuurt alleen een ID mee.
+Maar Hibernate weet niet: is dat een bestaand object? Moet ik het ophalen?
+
+Daarom doe jij handmatig:
+
+java
+Copy
+Edit
+Betaalmethode betaalmethode = em.find(Betaalmethode.class, betaalmethodeContant.getBetaalmethode().getId());
+Dat betekent:
+
+Zoek in de database het Betaalmethode object met dat ID.
+
+Nu heb je een echte entiteit in de persistence context (Hibernate kan ermee werken).
+
+Daarna kan je die koppelen aan jouw BetaalmethodeContant.
+
+Samengevat: Hibernate kan alleen werken met "echte" objecten uit de database (managed entities).
+Als je een object hebt met alleen een ID, zonder dat Hibernate het zelf geladen heeft, dan weet Hibernate niet wat ermee te doen.
+→ Dus jij helpt Hibernate door em.find() te gebruiken.
+
+4. Waarom werkte betaalmethodeContent.getBetaalmethode().getId() eerst niet goed?
+Omdat:
+
+Als je die doet zonder dat Hibernate weet dat het object bestaat, is het gewoon een los object in Java (niet gekoppeld aan database).
+
+Hibernate verwacht een managed entity (een object dat uit de database is opgehaald).
+
+Wanneer je dus betaalmethodeContent.getBetaalmethode().getId() doet zonder find(),
+heeft Hibernate geen garantie dat deze Betaalmethode echt bestaat, en kan je fouten krijgen bij saven.
+
+Daarom: eerst met find() ophalen → dan koppelen → dan saven.
+
+Heel kort samengevat:
+
+Actie	Wat stuur je?	Waarom?
+POST (aanmaken)	alleen data (valuta + verwijzing naar bestaande ID)	Database maakt nieuwe ID aan
+PUT (updaten)	ID in URL + nieuwe data in body	Je wijzigt een bestaand object
+In DAO opslaan	Eerst handmatig bestaande entiteit ophalen met find()	Hibernate moet een "echt" object hebben
+
+--------------------------------------------------------------------------------------------------
+
+1. Waarom moet je bij POST (bij BetaalmethodeContant) die ID niet apart zetten?
+Antwoord: Omdat bij jouw BetaalmethodeContant die ID al gekoppeld is aan een bestaande Betaalmethode.
+
+In jouw database:
+
+betaalmethode.id (PRIMARY KEY)
+
+betaalmethodecontant.id (PRIMARY KEY én FOREIGN KEY naar betaalmethode.id)
+
+Dus bij de POST stuur je:
+
+een bestaand betaalmethode ID (die je koppelt),
+
+en een valuta.
+
+Daarom hoef je geen aparte variabele aan te maken voor het ID. Je haalt het gewoon met betaalmethodeContant.getId().
+
+2. Waarom moet je in de DAO find gebruiken?
+Antwoord:
+Hibernate weet niet automatisch dat het ID van jouw BetaalmethodeContant verwijst naar een bestaande Betaalmethode-entiteit.
+
+Hibernate verwacht een echte Betaalmethode-object referentie in jouw BetaalmethodeContant, niet alleen een getal (ID).
+
+Daarom doe je:
+
+java
+Copy
+Edit
+Betaalmethode betaalmethodeId = entityManager.find(Betaalmethode.class, betaalmethodeContant.getId());
+betaalmethodeContant.setBetaalmethode(betaalmethodeId);
+Hiermee zeg je letterlijk:
+“Zoek deze bestaande Betaalmethode in de database, en zet hem als verwijzing in BetaalmethodeContant.”
+
+3. Waarom werkt betaalmethodeContant.getBetaalmethode().getId() NIET?
+Nu je vraag waar je echt op zat te kauwen:
+
+Antwoord: Omdat bij het moment van saven die Betaalmethode in BetaalmethodeContant nog leeg (null) is!
+
+Jij krijgt de BetaalmethodeContant binnen vanuit de frontend. Die bevat:
+
+id (int): het ID van de bestaande betaalmethode.
+
+valuta (String).
+
+Maar de property betaalmethode zelf (de Betaalmethode-object-referentie in Java) is nog leeg!
+Je hebt dus een ID, maar nog geen daadwerkelijk Betaalmethode-object erin gezet.
+
+Daarom:
+
+Als je probeert betaalmethodeContant.getBetaalmethode().getId() te doen, gaat hij crashen (NullPointerException).
+
+Want getBetaalmethode() geeft null terug.
+
+Pas nadat jij deze regel doet:
+
+java
+Copy
+Edit
+betaalmethodeContant.setBetaalmethode(betaalmethodeId);
+Pas daarna is betaalmethodeContant.getBetaalmethode().getId() geldig.
+
+4. Waarom kan je bij een foreign key zoals hier (subklasse) gewoon .getId() gebruiken?
+Antwoord: Omdat in jouw database design de betaalmethodecontant.id exact hetzelfde is als de betaalmethode.id.
+
+Dus:
+
+In BetaalmethodeContant heb je gewoon een id.
+
+Dat ID is tegelijk primary key én foreign key.
+
+Daarom kan je met betaalmethodeContant.getId() rechtstreeks naar de juiste Betaalmethode zoeken.
+
+Je hoeft dus geen betaalmethodeContant.getBetaalmethode().getId() te doen om het ID te vinden.
+Je doet gewoon betaalmethodeContant.getId().
+
+Samenvatting van jouw situatie:
+
+Stap	Wat gebeurt er?
+1. Front-end stuurt POST	Stuurt ID + valuta.
+2. Controller ontvangt	Neemt het als één BetaalmethodeContant object aan.
+3. Service roept DAO aan	Gaat naar de save-methode van je DAO.
+4. DAO doet EntityManager.find	Vindt de bestaande Betaalmethode op basis van ID van BetaalmethodeContant.
+5. DAO setBetaalmethode	Zet de gevonden Betaalmethode in de BetaalmethodeContant.
+6. DAO persist	Hibernate kan nu netjes saven omdat de foreign key relatie klopt (volledige objectref aanwezig).
+Bonus
+Je database design zegt:
+
+sql
+Copy
+Edit
+create table betaalmethodecontant (
+    id INT PRIMARY KEY,
+    valuta varchar(255) NOT NULL,
+    FOREIGN KEY (id) REFERENCES betaalmethode(id)
+);
+Zie je? Die id is tegelijk primary én foreign.
+Dat maakt jouw leven makkelijk.
+Want dat betekent:
+
+Je hoeft geen aparte kolommen voor id's aan te maken.
+
+Gewoon met getId() kun je de juiste Betaalmethode vinden.
+
+Kort antwoord op je hoofdvraag:
+Waarom werkt betaalmethodeContant.getBetaalmethode().getId() niet? → Omdat getBetaalmethode() nog null is voordat je die find+set hebt gedaan.
+
+Waarom kan ik gewoon getId() gebruiken? → Omdat jouw betaalmethodecontant.id rechtstreeks verwijst naar de betaalmethode.id.
+
+Je redenatie was echt slim, je moest alleen nog één stap extra denken:
+"Heeft mijn BetaalmethodeContant-object al een volledige Betaalmethode erin, ja of nee?"
+En als nee → dan eerst find doen.
+

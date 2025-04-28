@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Betaalmethode Contant Toevoegen</title>
+    <link rel="stylesheet" href="BetaalmethodeContant.css">
+</head>
+<body>
+<!--    POST-->
+    <section class="form-container">
+        <h2>Voeg Betaalmethode Contant Toe</h2>
+        <form id="contantForm">
+            <label for="betaalmethode_id">Betaalmethode ID:</label>
+            <input type="number" id="betaalmethode_id" required>
+            <div class="error" id="betaalError"></div>
+
+            <label for="valuta">Valuta (bv. EUR, USD):</label>
+            <input type="text" id="valuta" maxlength="10" required>
+            <div class="error" id="valutaError"></div>
+
+            <button type="submit">Toevoegen</button>
+            <div id="resultMessage"></div>
+        </form>
+    </section>
+    <!--dit is die GET ALL-->
+    <section>
+        <div class="fetch-container">
+            <button id="fetchBetaalmethodeContantButton" class="glass-button">Toon BetaalmethodeContant</button>
+
+            <div id="betaalmethodeContantPopup" class="glass-popup hidden">
+                <div class="popup-content">
+                    <span id="closeBetaalmethodeContantPopup" class="close-button">&times;</span>
+                    <h2>Alle BetaalmethodeContant Records</h2>
+                    <pre id="betaalmethodeContantResult"></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--GET BY ID -->
+    <section class="get-betaalmethodecontant-section">
+        <h2>Zoek een Contante Betaalmethode op ID</h2>
+        <form id="getBetaalmethodeContantForm" class="glass-form">
+            <div class="form-group">
+                <label for="contant-id">Contant Betaalmethode ID:</label>
+                <input type="number" id="contant-id" required placeholder="Bijv. 1">
+            </div>
+            <button type="submit" class="glass-button">Zoek Contant Betaalmethode</button>
+        </form>
+
+        <div id="contantInfo" class="glass-result hidden">
+            <h3>Gevonden Contante Betaalmethode</h3>
+            <div id="contantDetails"></div>
+        </div>
+    </section>
+
+    <!--PUT-->
+    <!-- UPDATE BETAALMETHODECONTANT - GLASSY SECTION -->
+    <section class="update-betaalmethodecontant-section">
+        <h2>Betaalmethode Contant Bijwerken</h2>
+        <form id="updateBetaalmethodeContantForm" class="glass-form">
+            <div class="form-group">
+                <label for="contant-id">Betaalmethode ID:</label>
+                <input type="number" id="contant-idd" required placeholder="Bijv. 5">
+            </div>
+
+            <div class="form-group">
+                <label for="contant-valuta">Nieuwe Valuta:</label>
+                <input type="text" id="contant-valuta" required placeholder="Bijv. Euro">
+            </div>
+
+            <button type="submit" class="glass-button">Bijwerken</button>
+        </form>
+
+        <div id="updateResultContant" class="glass-result hidden"></div>
+    </section>
+
+    <!--dit is die DELETE-->
+    <section class="delete-betaalmethodecontant-section glass-card">
+        <h2>Verwijder Betaalmethode Contant</h2>
+        <form id="deleteBetaalmethodeContantForm" class="glass-form">
+            <div class="input-group">
+                <label for="contant-id">BetaalmethodeContant ID:</label>
+                <input type="number" id="contant-idp" name="contant-id" required placeholder="Bijv. 7" />
+            </div>
+            <button type="submit" class="delete-btn">Verwijder Contante Betaalmethode</button>
+            <p id="deleteContantMessage" class="delete-message"></p>
+        </form>
+    </section>
+
+<script src="BetaalmethodeContant.js"></script>
+</body>
+</html>

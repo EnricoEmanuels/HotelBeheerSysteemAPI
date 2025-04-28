@@ -36,6 +36,14 @@ public class BetaalmethodeCryptoDao implements EntityDao<BetaalmethodeCrypto> {
 
         try {
             transaction.begin();
+            // die betaalmethodeCrypto heeft al een ID erin die gekoppeld is aan die betaalmethode
+            Betaalmethode betaalmethodeId = entityManager.find(Betaalmethode.class, betaalmethodeCrypto.getId());
+            // als die ID leeg is dan retourneer je bestaat niet
+            if (betaalmethodeId == null) {
+                throw new IllegalArgumentException("Betaalmethode met ID " + betaalmethodeCrypto.getId() + " bestaat niet.");
+            }
+            betaalmethodeCrypto.setBetaalmethode(betaalmethodeId);
+
             entityManager.persist(betaalmethodeCrypto);
             transaction.commit();
         } catch (Exception e) {

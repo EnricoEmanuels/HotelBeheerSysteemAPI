@@ -53,6 +53,21 @@ public class HotelBeheerSysteemConfig
         // Dan pas deze regel: nu is emf niet meer null
         EntityManager entityManager = JPAConfig.getEntityManger();
 
+        // betaalmethodeCrypto
+        BetaalmethodeCryptoDao betaalmethodeCryptoDao = new BetaalmethodeCryptoDao(entityManager);
+        BetaalmethodeCryptoService betaalmethodeCryptoService = new BetaalmethodeCryptoService(betaalmethodeCryptoDao);
+        BetaalmethodeCryptoMapper betaalmethodeCryptoMapper = new BetaalmethodeCryptoMapper();
+
+        BetaalmethodeCryptoController betaalmethodeCryptoController = new BetaalmethodeCryptoController(betaalmethodeCryptoService, betaalmethodeCryptoMapper);
+        config.register(betaalmethodeCryptoController);
+
+        // betaalmethodeCreditcard
+        BetaalmethodeCreditcardDao betaalmethodeCreditcardDao = new BetaalmethodeCreditcardDao(entityManager);
+        BetaalmethodeCreditcardService betaalmethodeCreditcardService = new BetaalmethodeCreditcardService(betaalmethodeCreditcardDao);
+        BetaalmethodeCreditcardMapper betaalmethodeCreditcardMapper = new BetaalmethodeCreditcardMapper();
+        BetaalmethodeCreditcardController  betaalmethodeCreditcardController = new BetaalmethodeCreditcardController(betaalmethodeCreditcardService, betaalmethodeCreditcardMapper);
+        config.register(betaalmethodeCreditcardController);
+
         // Betaalmethode
 
         BetaalmethodeDao betaalmethodeDao = new BetaalmethodeDao(entityManager);
@@ -63,6 +78,14 @@ public class HotelBeheerSysteemConfig
         BeschikbareKamersService beschikbareKamersService = new BeschikbareKamersService(beschikbareKamerDao);
         BeschikbareKamerMapper beschikbareKamerMapper = new BeschikbareKamerMapper();
 
+        // betaalmethodeContant
+        BetaalmethodeContantDao betaalmethodeContantDao = new BetaalmethodeContantDao(entityManager);
+        BetaalmethodeContantMapper betaalmethodeContantMapper = new BetaalmethodeContantMapper();
+        BetaalmethodeContantService betaalmethodeContantService = new BetaalmethodeContantService(betaalmethodeContantDao);
+
+        BetaalmethodeContantController betaalmethodeContantController = new BetaalmethodeContantController(betaalmethodeContantService, betaalmethodeContantMapper, betaalmethodeService);
+        // ik moet constructor injectie forseren
+        config.register(betaalmethodeContantController);
 
         // kamersboeken
         KamersBoekenDao kamersBoekenDao = new KamersBoekenDao(entityManager);

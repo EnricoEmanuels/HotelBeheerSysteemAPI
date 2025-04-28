@@ -1,0 +1,56 @@
+Oké, laten we dit stap voor stap samen aanpakken.
+Ik snap precies wat je bedoelt. Je ziet in je network tab (header, profile, response, initializer, timing) dat de request werkt — Status 200 OK — maar de informatie verschijnt niet op je pagina.
+
+Laat me uitleggen wat elk onderdeel betekent:
+
+Header:
+
+Dit zijn technische gegevens over je request en response (zoals welke server antwoordt, content-type = JSON, caching-instellingen enz.).
+
+Belangrijk voor jou: als Content-Type is application/json, dan weet je dat je .json() mag gebruiken om het uit te lezen.
+
+Profile:
+
+Meestal geavanceerde prestatiegegevens (wordt niet altijd gebruikt).
+
+Niet belangrijk voor jouw probleem nu.
+
+Response:
+
+HIER zie je echt de gegevens die terugkomen vanuit je server.
+
+Jouw response:
+
+json
+Copy
+Edit
+[{id: 6, betaalmethode: {id: 6, methode: "contant", datum: 1745625600000, klant: {...}}, valuta: "EURO"}]
+Dat betekent: de backend heeft correcte data gestuurd!
+
+Initializer en Timing:
+
+Gaat over wanneer het request gestart is en hoe lang het duurde.
+
+Ook niet belangrijk voor jouw probleem nu.
+
+Dus samengevat:
+Je GET werkt. Je krijgt netjes de juiste JSON binnen.
+MAAR er is een klein foutje in de manier waarop je de datum en klant uitleest in je JavaScript.
+
+Wat gaat mis?
+Kijk: in jouw code probeer je dit:
+
+javascript
+Copy
+Edit
+Datum: ${bc.betaalmethode && bc.betaalmethode.datum ? bc.betaalmethode.datum : 'Onbekend'}
+Klant ID: ${bc.betaalmethode && bc.betaalmethode.klant ? bc.betaalmethode.klant.id : 'Onbekend'}
+Probleem:
+
+datum is een heel groot getal (timestamp in milliseconden). Je toont die gewoon raar als cijfer.
+
+klant bestaat wel, maar je probeert die op te halen zonder te checken of betaalmethode.klant echt een object is.
+
+MAAR: je laat het resultaat via .textContent zien in een <pre> tag.
+textContent toont tekst, maar multiline-teksten (\n) moeten echt netjes worden geschreven, anders zie je niks of een rare tekst.
+
