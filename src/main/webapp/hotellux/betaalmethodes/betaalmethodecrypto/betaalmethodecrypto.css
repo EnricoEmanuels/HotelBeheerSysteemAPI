@@ -1,0 +1,290 @@
+body {
+    display: flex;
+    flex-direction: column; /* Alles netjes onder elkaar */
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #80deea);
+    gap: 2rem;
+
+}
+/*voor die post */
+.form-container {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2rem;
+    margin-top: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+}
+h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+}
+input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+button {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #00acc1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #007c91;
+}
+.error {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+#resultMessage {
+    margin-top: 1rem;
+    font-weight: bold;
+}
+/*dit is voor die GET ALL*/
+.fetch-crypto-container {
+    margin-top: 2rem;
+    text-align: center;
+}
+.glass-crypto-button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    cursor: pointer;
+    color: #007c91;
+    transition: background 0.3s ease;
+}
+.glass-crypto-button:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+.glass-crypto-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 172, 193, 0.2);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.popup-crypto-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.close-crypto-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.hidden {
+    display: none;
+}
+/*voor die GET BY ID */
+.get-betaalmethodecrypto-section {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    text-align: center;
+}
+.get-betaalmethodecrypto-section h2 {
+    color: #333;
+}
+.get-betaalmethodecrypto-section .glass-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.get-betaalmethodecrypto-section .form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.get-betaalmethodecrypto-section .glass-form input {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.25);
+    color: #000;
+    font-size: 16px;
+}
+.get-betaalmethodecrypto-section .glass-button {
+    padding: 12px;
+    background: linear-gradient(135deg, #ff6ec4, #7873f5);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.get-betaalmethodecrypto-section .glass-button:hover {
+    transform: scale(1.05);
+}
+.get-betaalmethodecrypto-section .glass-result {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    color: #000;
+}
+.get-betaalmethodecrypto-section .hidden {
+    display: none;
+}
+
+/* UPDATE BETAALMETHODECRYPTO SECTION */
+.update-betaalmethodecrypto-section {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    text-align: center;
+}
+.update-betaalmethodecrypto-section h2 {
+    color: #333;
+}
+.glass-form-crypto {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.form-group-crypto {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.glass-form-crypto input {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.25);
+    color: #000;
+    font-size: 16px;
+}
+.glass-button-crypto {
+    padding: 12px;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.glass-button-crypto:hover {
+    transform: scale(1.05);
+}
+.glass-result-crypto {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    color: #000;
+}
+.glass-result-crypto.hidden {
+    display: none;
+}
+
+/* DELETE BETAALMETHODECRYPTO SECTION */
+.delete-betaalmethodecrypto-section {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    text-align: center;
+}
+
+.delete-betaalmethodecrypto-section h2 {
+    color: #333;
+}
+
+.glass-form-crypto {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group-crypto {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.glass-form-crypto input {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.25);
+    color: #000;
+    font-size: 16px;
+}
+
+.glass-button-crypto {
+    padding: 12px;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.glass-button-crypto:hover {
+    transform: scale(1.05);
+}
+
+.glass-result-crypto {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    color: #000;
+}
+
+.glass-result-crypto.hidden {
+    display: none;
+}
+

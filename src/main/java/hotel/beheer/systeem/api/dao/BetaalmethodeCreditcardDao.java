@@ -37,6 +37,12 @@ public class BetaalmethodeCreditcardDao implements EntityDao<BetaalmethodeCredit
 
         try {
             transaction.begin();
+            // we gaan die betaalmethode ID uit die betaalmethodeCreditcard halen en dan
+            // handmatig persisten in de database
+
+            Betaalmethode betaalmethodeId = entityManager.find(Betaalmethode.class, betaalmethodeCreditcard.getId());
+            betaalmethodeCreditcard.setBetaalmethode(betaalmethodeId);
+
             entityManager.persist(betaalmethodeCreditcard);
             transaction.commit();
         } catch (Exception e) {

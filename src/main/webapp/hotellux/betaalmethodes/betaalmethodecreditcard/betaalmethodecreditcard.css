@@ -1,0 +1,258 @@
+body {
+    display: flex;
+    flex-direction: column; /* Alles netjes onder elkaar */
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+
+    font-family: Arial, sans-serif;
+
+    background: #f9f9f9;
+}
+
+.FF {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 30px;
+    width: 300px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, button {
+    margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.error {
+    color: red;
+    font-size: 0.8em;
+    margin-bottom: 10px;
+}
+
+#resultMessage {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/*Dit is voor die GET ALL*/
+/* Basisstijl voor alle fetch containers */
+.fetch-ff-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Knopstijl */
+.glass-ff-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    color: white;
+    background: rgba(0, 123, 255, 0.3);
+    border: none;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.glass-ff-button:hover {
+    background: rgba(0, 123, 255, 0.5);
+}
+
+/* Popup stijl */
+.glass-ff-popup {
+    position: relative;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    max-width: 600px;
+    width: 90%;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Popup content */
+.popup-ff-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.close-ff-button {
+    align-self: flex-end;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+pre {
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* --- GET BY ID voor Betaalmethode Creditcard (zelfde stijl als Crypto) --- */
+.get-betaalmethodecreditcard-section {
+    margin-top: 40px;
+}
+
+.get-betaalmethodecreditcard-section h2 {
+    margin-bottom: 20px;
+}
+
+#creditcardDetails {
+    text-align: left;
+    line-height: 1.6;
+}
+
+/*voor die PUT*/
+
+.update-betaalmethodecreditcard-section {
+    margin-top: 40px;
+}
+
+.update-betaalmethodecreditcard-section h2 {
+    margin-bottom: 20px;
+}
+
+.glass-form-creditcard {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    max-width: 400px;
+    width: 90%;
+}
+
+.form-group-creditcard {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+input, button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+.glass-button-creditcard {
+    background: rgba(0, 123, 255, 0.3);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.glass-button-creditcard:hover {
+    background: rgba(0, 123, 255, 0.5);
+}
+
+.glass-result-creditcard {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 255, 0, 0.1);
+    border-radius: 8px;
+    backdrop-filter: blur(6px);
+    font-size: 16px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Section voor Delete */
+.delete-betaalmethodecreditcard-section {
+    margin-top: 40px;
+}
+
+/* Koptekst */
+.delete-betaalmethodecreditcard-section h2 {
+    margin-bottom: 20px;
+}
+
+/* Glass form stijl */
+.glass-form-creditcard {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    max-width: 400px;
+    width: 90%;
+}
+
+/* Input velden */
+.form-group-creditcard {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+input, button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+/* Verwijder knop */
+.glass-button-creditcard {
+    background: rgba(0, 123, 255, 0.3);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.glass-button-creditcard:hover {
+    background: rgba(0, 123, 255, 0.5);
+}
+
+/* Resultaatbericht */
+.glass-result-creditcard {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 255, 0, 0.1);
+    border-radius: 8px;
+    backdrop-filter: blur(6px);
+    font-size: 16px;
+}
+
+/* Verberg elementen standaard */
+.hidden {
+    display: none;
+}

@@ -183,18 +183,31 @@ document.addEventListener("DOMContentLoaded", () => {
             // Debugging: log de response om te zien wat er binnenkomt
             console.log(betaalmethodeContanten);
 
+            // if (Array.isArray(betaalmethodeContanten) && betaalmethodeContanten.length > 0) {
+            //     let output = '';
+            //     betaalmethodeContanten.forEach(bc => {
+            //         output += `
+            //         <strong>ID:</strong> ${bc.betaalmethode ? bc.betaalmethode.id : 'Geen ID'}<br>
+            //         <strong>Valuta:</strong> ${bc.valuta}<br><br>
+            //     `;
+            //     });
+            //     resultDiv.innerHTML = output;  // HIER innerHTML ipv textContent
+            // } else {
+            //     resultDiv.innerHTML = "Geen BetaalmethodeContant records gevonden.";
+            // }
+
             if (Array.isArray(betaalmethodeContanten) && betaalmethodeContanten.length > 0) {
                 let output = '';
                 betaalmethodeContanten.forEach(bc => {
                     output += `
-                    <strong>ID:</strong> ${bc.betaalmethode ? bc.betaalmethode.id : 'Geen ID'}<br>
-                    <strong>Valuta:</strong> ${bc.valuta}<br><br>
-                `;
+                        <strong>Valuta:</strong> ${bc.valuta}<br><br>
+                        `;
                 });
-                resultDiv.innerHTML = output;  // HIER innerHTML ipv textContent
+                resultDiv.innerHTML = output;
             } else {
                 resultDiv.innerHTML = "Geen BetaalmethodeContant records gevonden.";
             }
+
 
             popup.classList.remove('hidden');
         } catch (error) {

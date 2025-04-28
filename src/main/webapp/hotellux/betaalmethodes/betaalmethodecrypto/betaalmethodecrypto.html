@@ -1,10 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Betaalmethode Crypto Toevoegen</title>
+    <link rel="stylesheet" href="betaalmethodecrypto.css">
 </head>
 <body>
+    <section class="form-container">
+        <h2>Voeg Betaalmethode Crypto Toe</h2>
+        <form id="cryptoForm">
+            <label for="betaalmethode_id">Betaalmethode ID:</label>
+            <input type="number" id="betaalmethode_id" required>
+            <div class="error" id="idError"></div>
 
+            <label for="walletadres">Walletadres:</label>
+            <input type="text" id="walletadres" maxlength="255" required>
+            <div class="error" id="walletError"></div>
+
+            <label for="muntsoort">Muntsoort (bv. BTC, ETH):</label>
+            <input type="text" id="muntsoort" maxlength="255" required>
+            <div class="error" id="muntError"></div>
+
+            <button type="submit">Toevoegen</button>
+            <div id="resultMessage"></div>
+        </form>
+    </section>
+
+    <!-- ALLE BETAALMETHODE CRYPTO'S OPHALEN -->
+    <section>
+        <div class="fetch-crypto-container">
+            <button id="fetchCryptoButton" class="glass-crypto-button">Toon Crypto Betaalmethodes</button>
+
+            <div id="cryptoPopup" class="glass-crypto-popup hidden">
+                <div class="popup-crypto-content">
+                    <span id="closeCryptoPopup" class="close-crypto-button">&times;</span>
+                    <h2>Alle Crypto Betaalmethodes</h2>
+                    <pre id="cryptoData"></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--    dit is voor die GET BY ID -->
+    <section class="get-betaalmethodecrypto-section">
+        <h2>Zoek een Crypto Betaalmethode op ID</h2>
+        <form id="getBetaalmethodeCryptoForm" class="glass-form">
+            <div class="form-group">
+                <label for="crypto-id">Crypto Betaalmethode ID:</label>
+                <input type="number" id="crypto-id" required placeholder="Bijv. 1">
+            </div>
+            <button type="submit" class="glass-button">Zoek Crypto Betaalmethode</button>
+        </form>
+
+        <div id="cryptoInfo" class="glass-result hidden">
+            <h3>Gevonden Crypto Betaalmethode</h3>
+            <div id="cryptoDetails"></div>
+        </div>
+    </section>
+
+    <!-- UPDATE BETAALMETHODECRYPTO - GLASSY SECTION -->
+    <section class="update-betaalmethodecrypto-section">
+        <h2>Betaalmethode Crypto Bijwerken</h2>
+        <form id="updateBetaalmethodeCryptoForm" class="glass-form-crypto">
+            <div class="form-group-crypto">
+                <label for="crypto-id">Betaalmethode ID:</label>
+                <input type="number" id="crypto-idd" required placeholder="Bijv. 3">
+            </div>
+
+            <div class="form-group-crypto">
+                <label for="crypto-walletadres">Nieuw Walletadres:</label>
+                <input type="text" id="crypto-walletadres" required placeholder="Bijv. 0xABC123...">
+            </div>
+
+            <div class="form-group-crypto">
+                <label for="crypto-muntsoort">Nieuwe Muntsoort:</label>
+                <input type="text" id="crypto-muntsoort" required placeholder="Bijv. Bitcoin">
+            </div>
+
+            <button type="submit" class="glass-button-crypto">Bijwerken</button>
+        </form>
+
+        <div id="updateResultCrypto" class="glass-result-crypto hidden"></div>
+    </section>
+
+    <!--    voor die delete-->
+    <section class="delete-betaalmethodecrypto-section glass-card">
+        <h2>Verwijder Betaalmethode Crypto</h2>
+        <form id="deleteBetaalmethodeCryptoForm" class="glass-form-crypto">
+            <div class="form-group-crypto">
+                <label for="crypto-id">BetaalmethodeCrypto ID:</label>
+                <input type="number" id="crypto-idp" name="crypto-id" required placeholder="Bijv. 5" />
+            </div>
+            <button type="submit" class="glass-button-crypto">Verwijder Crypto Betaalmethode</button>
+            <p id="deleteCryptoMessage" class="glass-result-crypto hidden"></p>
+        </form>
+    </section>
+
+
+
+
+
+    <script src="betaalmethodecrypto.js"></script>
 </body>
 </html>

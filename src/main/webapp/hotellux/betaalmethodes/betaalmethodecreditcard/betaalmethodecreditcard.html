@@ -1,10 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Betaalmethode Creditcard Toevoegen</title>
+    <link rel="stylesheet" href="betaalmethodecreditcard.css">
 </head>
 <body>
+    <section class="FF">
+        <h2>Creditcard Toevoegen</h2>
+        <form id="creditcardForm">
+            <label for="betaalmethode_id">Betaalmethode ID:</label>
+            <input type="number" id="betaalmethode_id" required>
+            <div class="error" id="idError"></div>
 
+            <label for="volledigeNaam">Volledige Naam:</label>
+            <input type="text" id="volledigeNaam" maxlength="255" required>
+            <div class="error" id="naamError"></div>
+
+            <label for="kaartnummer">Kaartnummer:</label>
+            <input type="text" id="kaartnummer" maxlength="255" required>
+            <div class="error" id="kaartError"></div>
+
+            <label for="vervaldatum">Vervaldatum:</label>
+            <input type="date" id="vervaldatum" required>
+            <div class="error" id="vervalError"></div>
+
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" maxlength="4" required>
+            <div class="error" id="cvvError"></div>
+
+            <button type="submit">Toevoegen</button>
+            <div id="resultMessage"></div>
+        </form>
+    </section>
+<!--    dit is die GET ALL -->
+    <section>
+        <div class="fetch-ff-container">
+            <button id="fetchCreditcardButton" class="glass-ff-button">Toon Creditcard Betaalmethodes</button>
+
+            <div id="creditcardPopup" class="glass-ff-popup hidden">
+                <div class="popup-ff-content">
+                    <span id="closeCreditcardPopup" class="close-ff-button">&times;</span>
+                    <h2>Alle Creditcard Betaalmethodes</h2>
+                    <pre id="creditcardData"></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GET BY ID voor Betaalmethode Creditcard -->
+    <section class="get-betaalmethodecreditcard-section">
+        <h2>Zoek een Creditcard Betaalmethode op ID</h2>
+        <form id="getBetaalmethodeCreditcardForm" class="glass-form">
+            <div class="form-group">
+                <label for="creditcard-id">Creditcard Betaalmethode ID:</label>
+                <input type="number" id="creditcard-id" required placeholder="Bijv. 1">
+            </div>
+            <button type="submit" class="glass-button">Zoek Creditcard Betaalmethode</button>
+        </form>
+
+        <div id="creditcardInfo" class="glass-result hidden">
+            <h3>Gevonden Creditcard Betaalmethode</h3>
+            <div id="creditcardDetails"></div>
+        </div>
+    </section>
+
+    <!-- UPDATE BETAALMETHODE CREDITCARD - GLASSY SECTION -->
+    <section class="update-betaalmethodecreditcard-section">
+        <h2>Betaalmethode Creditcard Bijwerken</h2>
+        <form id="updateBetaalmethodeCreditcardForm" class="glass-form-creditcard">
+            <div class="form-group-creditcard">
+                <label for="creditcard-id">Betaalmethode ID:</label>
+                <input type="number" id="creditcard-idd" required placeholder="Bijv. 5">
+            </div>
+
+            <div class="form-group-creditcard">
+                <label for="volledige-naam">Nieuwe Volledige Naam:</label>
+                <input type="text" id="volledige-naam" required placeholder="Bijv. Jan Jansen">
+            </div>
+
+            <div class="form-group-creditcard">
+                <label for="kaartnummer">Nieuw Kaartnummer:</label>
+                <input type="text" id="kaartnummerr" required placeholder="Bijv. 1234 5678 9876 5432">
+            </div>
+
+            <div class="form-group-creditcard">
+                <label for="vervaldatum">Nieuwe Vervaldatum:</label>
+                <input type="date" id="vervaldatumm" required>
+            </div>
+
+            <div class="form-group-creditcard">
+                <label for="cvv">Nieuwe CVV:</label>
+                <input type="text" id="cvvv" required placeholder="Bijv. 123">
+            </div>
+
+            <button type="submit" class="glass-button-creditcard">Bijwerken</button>
+        </form>
+
+        <div id="updateResultCreditcard" class="glass-result-creditcard hidden"></div>
+    </section>
+
+<!--    voor die DELETE-->
+    <section class="delete-betaalmethodecreditcard-section glass-card">
+        <h2>Verwijder Betaalmethode Creditcard</h2>
+        <form id="deleteBetaalmethodeCreditcardForm" class="glass-form-creditcard">
+            <div class="form-group-creditcard">
+                <label for="creditcard-id">BetaalmethodeCreditcard ID:</label>
+                <input type="number" id="creditcard-idp" name="creditcard-id" required placeholder="Bijv. 7" />
+            </div>
+            <button type="submit" class="glass-button-creditcard">Verwijder Creditcard Betaalmethode</button>
+            <p id="deleteCreditcardMessage" class="glass-result-creditcard hidden"></p>
+        </form>
+    </section>
+
+
+
+    <script src="betaalmethodecreditcard.js"></script>
 </body>
 </html>

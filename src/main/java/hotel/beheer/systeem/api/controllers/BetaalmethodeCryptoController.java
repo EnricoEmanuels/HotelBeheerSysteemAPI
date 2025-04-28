@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
-// -------------- ik moet het nog testen via die frontend
+// -------------- BetaalmethodeCryptoController is officieel af
 @Path("/betaalmethodecryptos")
 public class BetaalmethodeCryptoController {
     private BetaalmethodeCryptoService betaalmethodeCryptoService;
